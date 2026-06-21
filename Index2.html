@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 26.2.3.2 (Linux)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="00:00:00"/>
+	<style type="text/css">
+		@page { size: 8.27in 11.69in; margin: 0.79in }
+		p { margin-bottom: 0.1in; line-height: 115%; background: transparent }
+		pre { font-size: 10pt; font-family: "Liberation Mono", monospace; background: transparent }
+	</style>
+</head>
+<body lang="en-US" link="#000080" vlink="#800000" dir="ltr"><pre>```html
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;LINK Startup Animation&lt;/title&gt;
+  &lt;style&gt;
+    :root {
+      --bg-cream: #fffdfa;
+      --text-espresso: #110a06;
+      --brand-mocha: #3d230d;
+
+      /* ==========================================
+         1. UNTOUCHED STARTING COORDINATES &amp; SIZE
+         ========================================== */
+      --init-i-dot-x: -33px;  
+      --init-i-dot-y: 112px;  
+      --init-i-dot-size: 26px; 
+
+      /* ==========================================
+         2. ADJUSTED LOGO NODES (Larger tips, further apart)
+         ========================================== */
+      --node-size-final: 54px;   /* Larger corner balls as requested */
+      
+      /* Apex (Top Dot) Final Position */
+      --apex-x: 0px;
+      --apex-y: -64px;
+
+      /* Left Dot Final Position */
+      --left-x: -57px;
+      --left-y: 35px;
+
+      /* Right Dot Final Position */
+      --right-x: 57px;
+      --right-y: 35px;
+
+      /* ==========================================
+         3. ADJUSTED BRIDGE &amp; CUTOUT (Thinner arms)
+         ========================================== */
+      --bridge-scale: 2.5;       /* Balanced connection volume */
+      --cutout-size: 88px;       /* Larger inner hole to thin the connecting arms */
+      --cutout-offset-y: 8px;    /* Center calibration */
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      height: 600px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* --- STAGE 1: BRAND TEXT (UNTOUCHED) --- */
+    .brand-text {
+      font-size: 110px;
+      font-weight: 900;
+      color: var(--text-espresso);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      position: absolute;
+      z-index: 10;
+      pointer-events: none;
+      gap: 15px;
+      padding-left: 56px; 
+      transform: translate(24px, 22px); 
+    }
+
+    .letter-l, .letter-n, .letter-k {
+      display: inline-block;
+      line-height: 0.85;
+      animation: fadeOutSurroundings 0.6s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+      animation-delay: 1.4s;
+    }
+
+    /* The custom lowercase 'i' */
+    .letter-i {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      width: 44px;
+      height: 105px;
+    }
+
+    /* Stem of the 'i' */
+    .stem {
+      width: 24px;
+      height: 56px;
+      background-color: var(--text-espresso);
+      position: absolute;
+      bottom: 0;
+      animation: fadeOutSurroundings 0.6s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+      animation-delay: 1.4s;
+    }
+
+    /* --- STAGE 2: THE METABALL TRIANGLE --- */
+    .logo-stage {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 5;
+    }
+
+    .metaball-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      filter: url('#gooey-filter');
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* The animated main-dot starts small in the text and scales up smoothly at the end */
+    .main-dot {
+      position: absolute;
+      width: var(--init-i-dot-size);
+      height: var(--init-i-dot-size);
+      background-color: var(--brand-mocha);
+      border-radius: 50%;
+      z-index: 8;
+      animation: moveToApex 1.0s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      animation-delay: 1.4s;
+    }
+
+    /* Sprouting left and right nodes */
+    .node {
+      position: absolute;
+      width: var(--node-size-final);
+      height: var(--node-size-final);
+      background-color: var(--brand-mocha);
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    .node-left {
+      animation: splitToLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: 2.3s;
+    }
+
+    .node-right {
+      animation: splitToRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: 2.3s;
+    }
+
+    /* Center bridge connector */
+    .gooey-bridge {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      background-color: var(--brand-mocha);
+      border-radius: 50%;
+      transform: scale(0);
+      top: calc(50% - 16px);
+      left: calc(50% - 16px);
+      animation: expandBridge 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      animation-delay: 3.0s;
+    }
+
+    /* Crisp Custom Cutout Shield */
+    .inner-cutout {
+      position: absolute;
+      width: var(--cutout-size);
+      height: var(--cutout-size);
+      z-index: 9;
+      transform: scale(0);
+      top: calc(50% - (var(--cutout-size) / 2) + var(--cutout-offset-y));
+      left: calc(50% - (var(--cutout-size) / 2));
+      animation: popCutout 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
+      animation-delay: 3.7s;
+    }
+
+    .cutout-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* --- STAGE 3: CONTINUE BUTTON --- */
+    .action-gate {
+      position: absolute;
+      bottom: 80px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: revealButton 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: 4.4s;
+      z-index: 20;
+    }
+
+    .btn-continue {
+      display: inline-block;
+      text-decoration: none;
+      padding: 15px 45px;
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--bg-cream);
+      background-color: var(--text-espresso);
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(17, 10, 6, 0.1);
+      transition: transform 0.2s ease, background-color 0.2s ease;
+      font-family: Arial, sans-serif;
+      letter-spacing: 1.5px;
+    }
+
+    .btn-continue:hover {
+      background-color: var(--brand-mocha);
+      transform: scale(1.03);
+    }
+
+    /* --- ANIMATION KEYFRAMES --- */
+    @keyframes fadeOutSurroundings {
+      to {
+        opacity: 0;
+        filter: blur(5px);
+        transform: scale(0.85);
+      }
+    }
+
+    @keyframes moveToApex {
+      0% {
+        width: var(--init-i-dot-size);
+        height: var(--init-i-dot-size);
+        transform: translate(var(--init-i-dot-x), var(--init-i-dot-y));
+      }
+      40% {
+        /* Expand dot smoothly to larger final size */
+        width: var(--node-size-final);
+        height: var(--node-size-final);
+      }
+      100% {
+        width: var(--node-size-final);
+        height: var(--node-size-final);
+        transform: translate(var(--apex-x), var(--apex-y));
+      }
+    }
+
+    @keyframes splitToLeft {
+      0% {
+        opacity: 1;
+        transform: translate(var(--apex-x), var(--apex-y));
+      }
+      100% {
+        opacity: 1;
+        transform: translate(var(--left-x), var(--left-y));
+      }
+    }
+
+    @keyframes splitToRight {
+      0% {
+        opacity: 1;
+        transform: translate(var(--apex-x), var(--apex-y));
+      }
+      100% {
+        opacity: 1;
+        transform: translate(var(--right-x), var(--right-y));
+      }
+    }
+
+    @keyframes expandBridge {
+      0% {
+        transform: scale(0);
+      }
+      100% {
+        transform: scale(var(--bridge-scale));
+      }
+    }
+
+    @keyframes popCutout {
+      0% {
+        transform: scale(0) rotate(0deg);
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
+    @keyframes revealButton {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;div class=&quot;container&quot;&gt;
+    
+    &lt;!-- Stage 1: Brand Text --&gt;
+    &lt;div class=&quot;brand-text&quot;&gt;
+      &lt;span class=&quot;letter-l&quot;&gt;L&lt;/span&gt;
+      &lt;span class=&quot;letter-i&quot;&gt;
+        &lt;span class=&quot;stem&quot;&gt;&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;letter-n&quot;&gt;N&lt;/span&gt;
+      &lt;span class=&quot;letter-k&quot;&gt;K&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Stage 2: Liquid Triangle Formation --&gt;
+    &lt;div class=&quot;logo-stage&quot;&gt;
+      &lt;!-- The filtered liquid container --&gt;
+      &lt;div class=&quot;metaball-container&quot;&gt;
+        &lt;!-- Main Dot starts aligned with text, then animates to Apex --&gt;
+        &lt;div class=&quot;main-dot&quot;&gt;&lt;/div&gt;
+        
+        &lt;!-- Nodes that sprout directly from the top apex --&gt;
+        &lt;div class=&quot;node node-left&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;node node-right&quot;&gt;&lt;/div&gt;
+        
+        &lt;!-- Center bridge connecting the nodes with a gooey effect --&gt;
+        &lt;div class=&quot;gooey-bridge&quot;&gt;&lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Crisp, perfect organic triangular cutout --&gt;
+      &lt;div class=&quot;inner-cutout&quot;&gt;
+        &lt;svg viewBox=&quot;0 0 100 100&quot; class=&quot;cutout-svg&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+          &lt;path d=&quot;M 50 22 
+                   C 54 22, 69 49, 74 59 
+                   C 78 67, 71 73, 61 73 
+                   L 39 73 
+                   C 29 73, 22 67, 26 59 
+                   C 31 49, 46 22, 50 22 Z&quot; 
+                fill=&quot;var(--bg-cream)&quot; /&gt;
+        &lt;/svg&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Stage 3: Continue Button --&gt;
+    &lt;div class=&quot;action-gate&quot;&gt;
+      &lt;a href=&quot;index2.html&quot; class=&quot;btn-continue&quot;&gt;CONTINUE&lt;/a&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+  &lt;!-- Smoother &amp; Crisper Gooey Filter Matrix --&gt;
+  &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; version=&quot;1.1&quot; style=&quot;width: 0; height: 0; position: absolute;&quot;&gt;
+    &lt;defs&gt;
+      &lt;filter id=&quot;gooey-filter&quot;&gt;
+        &lt;feGaussianBlur in=&quot;SourceGraphic&quot; stdDeviation=&quot;8&quot; result=&quot;blur&quot; /&gt;
+        &lt;feColorMatrix in=&quot;blur&quot; mode=&quot;matrix&quot; values=&quot;1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10&quot; result=&quot;gooey&quot; /&gt;
+        &lt;feComposite in=&quot;SourceGraphic&quot; in2=&quot;gooey&quot; operator=&quot;atop&quot; /&gt;
+      &lt;/filter&gt;
+    &lt;/defs&gt;
+  &lt;/svg&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+```</pre>
+</body>
+</html>
