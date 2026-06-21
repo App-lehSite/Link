@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="logo.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINK - Your Friendly Neighborhood Hub</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        espresso: '#110a06',
+                        mocha: '#3d230d',
+                        caramel: '#a06e52',
+                        latte: '#f3e8dc',
+                        cream: '#fffdfa',
+                        matcha: '#4c704b',
+                        coffeeDark: '#211108',
+                        glassWhite: 'rgba(255, 255, 255, 0.45)',
+                        glassBorder: 'rgba(160, 110, 82, 0.15)'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+                        display: ['Playfair Display', 'Georgia', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom Glassmorphism Styles */
+        .glass-panel {
+            background: rgba(255, 253, 250, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(160, 110, 82, 0.12);
+            box-shadow: 0 8px 32px 0 rgba(33, 17, 8, 0.04);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Floating Ambient Background Animation */
+        .liquid-orb-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, #f3e8dc 0%, #fffdfa 100%);
+            overflow: hidden;
+        }
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.35;
+            animation: floatAmbientOrb 20s infinite alternate ease-in-out;
+        }
+        .orb-1 { width: 500px; height: 500px; background: #a06e52; top: -10%; left: -10%; animation-duration: 18s; }
+        .orb-2 { width: 600px; height: 600px; background: #f3e8dc; bottom: -20%; right: -10%; animation-duration: 25s; }
+        .orb-3 { width: 400px; height: 400px; background: #4c704b; top: 40%; left: 50%; animation-duration: 22s; }
+
+        @keyframes floatAmbientOrb {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            50% { transform: translate(80px, -60px) scale(1.15) rotate(180deg); }
+            100% { transform: translate(-50px, 40px) scale(0.9) rotate(360deg); }
+        }
+
+        /* Text-To-Speech Visual Reading Accent Frame Overlay */
+        .tts-reading-highlight {
+            background-color: rgba(76, 112, 75, 0.2) !important;
+            outline: 2px dashed #4c704b !important;
+            border-radius: 4px;
+            transition: all 0.12s ease-in-out;
+        }
+
+        /* High Contrast Absolute Override Rules */
+        body.high-contrast-mode {
+            background: #000000 !important;
+            color: #ffffff !important;
+        }
+        body.high-contrast-mode .liquid-orb-bg {
+            display: none !important;
+        }
+        body.high-contrast-mode .glass-panel {
+            background: #000000 !important;
+            border: 3px solid #ffffff !important;
+            box-shadow: none !important;
+            color: #ffffff !important;
+        }
+        body.high-contrast-mode * {
+            color: #ffffff !important;
+            border-color: #ffffff !important;
+            background-color: transparent !important;
+            text-shadow: none !important;
+            box-shadow: none !important;
+        }
+        body.high-contrast-mode button, 
+        body.high-contrast-mode select, 
+        body.high-contrast-mode input,
+        body.high-contrast-mode textarea {
+            background: #000000 !important;
+            color: #ffffff !important;
+            border: 2px solid #ffffff !important;
+        }
+        body.high-contrast-mode button:hover {
+            background: #ffffff !important;
+            color: #000000 !important;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a06e52;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="text-espresso bg-cream antialiased min-h-screen flex flex-col font-sans transition-colors duration-200">
+
+    <div class="liquid-orb-bg">
+        <div class="bg-orb orb-1"></div>
+        <div class="bg-orb orb-2"></div>
+        <div class="bg-orb orb-3"></div>
+    </div>
+
+    <header class="sticky top-0 z-40 w-full glass-panel border-b border-glassBorder backdrop-blur-md px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-mocha rounded-xl flex items-center justify-center text-cream shadow-md">
+                <i class="fa-solid var-icon fa-circle-nodes text-xl"></i>
+            </div>
+            <div>
+                <h1 class="font-display font-bold text-2xl tracking-tight text-espresso flex items-center gap-2">
+                    LINK <span class="text-xs font-sans font-medium px-2 py-0.5 bg-caramel/10 text-caramel rounded-full">Community Central</span>
+                </h1>
+                <p id="system-time-node" class="text-xs text-caramel/80 font-medium mt-0.5">📅 Session Connected</p>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-6">
+            <div class="flex items-center space-x-2 bg-mocha/5 p-1.5 rounded-xl border border-glassBorder">
+                <label for="suburb-selector" class="text-xs font-semibold text-mocha uppercase tracking-wider pl-2"><i class="fa-solid fa-map-pin text-caramel mr-1"></i> Suburb:</label>
+                <select id="suburb-selector" onchange="executeContextShift(this.value)" class="bg-cream text-espresso text-sm font-semibold py-1 px-3 rounded-lg border border-glassBorder shadow-sm focus:outline-none focus:ring-2 focus:ring-caramel">
+                    <option value="Strathfield" selected>Strathfield</option>
+                    <option value="Burwood">Burwood</option>
+                    <option value="Parramatta">Parramatta</option>
+                    <option value="Newtown">Newtown</option>
+                </select>
+            </div>
+
+            <nav class="flex space-x-1 bg-mocha/5 p-1 rounded-xl">
+                <button onclick="switchApplicationViewTab('dashboard')" id="tab-btn-dashboard" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-mocha hover:bg-cream/50">
+                    <i class="fa-solid fa-chart-pie mr-1.5"></i>Dashboard
+                </button>
+                <button onclick="switchApplicationViewTab('chat')" id="tab-btn-chat" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-mocha text-cream shadow-sm">
+                    <i class="fa-solid fa-comments mr-1.5"></i>Chat Hub &amp; AI
+                </button>
+                <button onclick="switchApplicationViewTab('marketplace')" id="tab-btn-marketplace" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-mocha hover:bg-cream/50">
+                    <i class="fa-solid fa-store mr-1.5"></i>Marketplace
+                </button>
+                <button onclick="switchApplicationViewTab('map')" id="tab-btn-map" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-mocha hover:bg-cream/50">
+                    <i class="fa-solid fa-map-location-dot mr-1.5"></i>Local Map &amp; Routes
+                </button>
+                <button onclick="switchApplicationViewTab('bulletin')" id="tab-btn-bulletin" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-mocha hover:bg-cream/50">
+                    <i class="fa-solid fa-clipboard mr-1.5"></i>Bulletin
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="app-main-layout" class="flex-1 max-w-[1600px] w-full mx-auto p-6 grid grid-cols-12 gap-6 items-start">
+        
+        <aside class="col-span-12 lg:col-span-3 space-y-6">
+            
+            <div class="glass-panel rounded-2xl p-5 relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 text-mocha/5 text-8xl font-black">
+                    <i class="fa-solid fa-building-user"></i>
+                </div>
+                <span class="text-xs font-bold uppercase tracking-widest text-caramel bg-caramel/10 px-2.5 py-1 rounded-md">Active Context Zone</span>
+                <h2 id="spotlight-suburb-title" class="font-display font-bold text-3xl text-espresso mt-2">Strathfield</h2>
+                <p id="spotlight-suburb-desc" class="text-xs text-mocha/80 mt-2 leading-relaxed">
+                    A beautiful premier transport residential and education hub nestled securely in the Inner West network pipeline.
+                </p>
+                <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-glassBorder">
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-caramel tracking-wider block">Est. Local Population</span>
+                        <span id="spotlight-pop" class="text-sm font-bold text-espresso font-mono">25,810 Residents</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-caramel tracking-wider block">Active Tickers</span>
+                        <span id="spotlight-activity" class="text-sm font-bold text-matcha flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-matcha animate-pulse"></span> Optimal Flow
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-5 space-y-4">
+                <h3 class="font-display font-semibold text-lg text-espresso border-b border-glassBorder pb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-universal-access text-caramel"></i> Accessibility Suite
+                </h3>
+                
+                <div class="flex items-start justify-between space-x-2 bg-cream/60 p-2.5 rounded-xl border border-glassBorder">
+                    <div>
+                        <label for="tts-hover-toggle" class="text-xs font-bold text-espresso block cursor-pointer">Audio Screen Reader Hover</label>
+                        <span class="text-[10px] text-mocha/70 block mt-0.5">Move pointer over words to trigger audio readings.</span>
+                    </div>
+                    <input type="checkbox" id="tts-hover-toggle" onchange="toggleSpeechSynthesisFeature(this.checked)" class="w-4 h-4 mt-1 accent-matcha cursor-pointer">
+                </div>
+
+                <div class="flex items-start justify-between space-x-2 bg-cream/60 p-2.5 rounded-xl border border-glassBorder">
+                    <div>
+                        <label for="high-contrast-toggle" class="text-xs font-bold text-espresso block cursor-pointer">High Contrast Mode</label>
+                        <span class="text-[10px] text-mocha/70 block mt-0.5">Stark black &amp; white scheme for high visual clarity.</span>
+                    </div>
+                    <input type="checkbox" id="high-contrast-toggle" onchange="toggleHighContrastThemeMode(this.checked)" class="w-4 h-4 mt-1 accent-espresso cursor-pointer">
+                </div>
+
+                <div class="bg-cream/60 p-2.5 rounded-xl border border-glassBorder space-y-1.5">
+                    <div class="flex justify-between items-center">
+                        <label for="text-size-slider" class="text-xs font-bold text-espresso">Adjust Core Text Scale</label>
+                        <span id="text-size-indicator" class="text-xs font-mono text-caramel font-bold">16px</span>
+                    </div>
+                    <input type="range" id="text-size-slider" min="14" max="24" value="16" oninput="executeDynamicTextScalingAdjustment(this.value)" class="w-full accent-caramel cursor-pointer">
+                    <span class="text-[10px] text-mocha/60 block text-center">Perfect resizing adaptation scaling for readability grids.</span>
+                </div>
+
+                <div class="border-t border-glassBorder pt-3">
+                    <button onclick="toggleSecretDropdownSectionMenu()" class="w-full flex items-center justify-between px-2.5 py-1.5 bg-caramel/5 text-caramel hover:bg-caramel/10 text-xs font-bold rounded-lg transition-all duration-200">
+                        <span><i class="fa-solid fa-user-secret mr-1"></i> Advanced Secret Controls</span>
+                        <i id="secret-chevron-icon" class="fa-solid fa-chevron-down transition-transform"></i>
+                    </button>
+                    
+                    <div id="secret-dropdown-content" class="hidden mt-2 p-2.5 bg-mocha text-cream rounded-xl space-y-2 border border-caramel/30 animate-fadeIn">
+                        <div class="flex items-start justify-between space-x-2">
+                            <div>
+                                <label for="braille-mode-toggle" class="text-xs font-bold text-cream block cursor-pointer">✨ Matrix Braille Option</label>
+                                <p class="text-[9px] text-latte/70 leading-normal mt-0.5">Funny Experimental Feature! Scans the DOM tree structures and instantly converts all plain text values into standard Braille Unicode nodes.</p>
+                            </div>
+                            <input type="checkbox" id="braille-mode-toggle" onchange="toggleBrailleTransformationMode(this.checked)" class="w-4 h-4 mt-1 accent-caramel cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <section class="col-span-12 lg:col-span-9">
+            
+            <div id="view-dashboard" class="hidden space-y-6">
+                <div class="glass-panel rounded-2xl p-6">
+                    <h3 class="font-display font-bold text-2xl text-espresso mb-2">Welcome to your Hub Workspace</h3>
+                    <p class="text-sm text-mocha/80">Stay aligned, keep informed, and share resources interactively with neighbors around your regional zone coordinate nodes.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                        <div class="p-4 bg-cream/80 border border-glassBorder rounded-xl">
+                            <div class="w-8 h-8 rounded-lg bg-caramel/10 flex items-center justify-center text-caramel mb-2"><i class="fa-solid fa-cloud-sun"></i></div>
+                            <h4 class="text-xs font-bold uppercase text-mocha">Local Forecast Ticker</h4>
+                            <p class="text-lg font-bold text-espresso mt-1">21°C • Mild Winds</p>
+                        </div>
+                        <div class="p-4 bg-cream/80 border border-glassBorder rounded-xl">
+                            <div class="w-8 h-8 rounded-lg bg-matcha/10 flex items-center justify-center text-matcha mb-2"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                            <h4 class="text-xs font-bold uppercase text-mocha">Active Council Advisories</h4>
+                            <p class="text-sm font-semibold text-espresso mt-1">Road Infrastructure Tune-up Scheduled</p>
+                        </div>
+                        <div class="p-4 bg-cream/80 border border-glassBorder rounded-xl">
+                            <div class="w-8 h-8 rounded-lg bg-mocha/10 flex items-center justify-center text-mocha mb-2"><i class="fa-solid fa-bullhorn"></i></div>
+                            <h4 class="text-xs font-bold uppercase text-mocha">Market Velocity Flag</h4>
+                            <p class="text-lg font-bold text-caramel mt-1">9+ Free Item Listings</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-5 bg-matcha/10 border border-matcha/20 rounded-2xl">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-matcha/10 pb-3 mb-3">
+                            <div>
+                                <h4 class="font-display font-bold text-lg text-matcha flex items-center gap-1.5">
+                                    <i class="fa-solid fa-seedling"></i> Local Eco-Footprint &amp; Swap Impact Goals
+                                </h4>
+                                <p class="text-xs text-espresso/70">Real-time localized sharing performance metrics gathered this quarter.</p>
+                            </div>
+                            <span class="text-xs font-bold font-mono px-3 py-1 bg-matcha text-cream rounded-xl">Level 4 Suburb Status</span>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div class="bg-cream/60 p-3 rounded-xl border border-glassBorder">
+                                <span class="text-xl font-bold text-matcha block font-mono" id="stat-cups">1,420</span>
+                                <span class="text-[10px] uppercase tracking-wider font-bold text-mocha/80">Cups Reused</span>
+                            </div>
+                            <div class="bg-cream/60 p-3 rounded-xl border border-glassBorder">
+                                <span class="text-xl font-bold text-matcha block font-mono" id="stat-books">389</span>
+                                <span class="text-[10px] uppercase tracking-wider font-bold text-mocha/80">Books Exchanged</span>
+                            </div>
+                            <div class="bg-cream/60 p-3 rounded-xl border border-glassBorder">
+                                <span class="text-xl font-bold text-matcha block font-mono" id="stat-km">1,840 km</span>
+                                <span class="text-[10px] uppercase tracking-wider font-bold text-mocha/80">Cycled Locally</span>
+                            </div>
+                            <div class="bg-cream/60 p-3 rounded-xl border border-glassBorder">
+                                <span class="text-xl font-bold text-matcha block font-mono" id="stat-co2">-412 kg</span>
+                                <span class="text-[10px] uppercase tracking-wider font-bold text-mocha/80">CO₂ Displaced</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="view-chat" class="grid grid-cols-12 gap-6">
+                
+                <div class="col-span-12 md:col-span-7 glass-panel rounded-2xl p-5 flex flex-col h-[580px]">
+                    <div class="border-b border-glassBorder pb-3 mb-3 flex items-center justify-between">
+                        <div>
+                            <h3 class="font-display font-semibold text-xl text-espresso flex items-center gap-2">
+                                <i class="fa-solid fa-comments text-caramel animate-bounce"></i> Neighborhood Lounge Room
+                            </h3>
+                            <p class="text-xs text-mocha/70">Simulated live feed from active local residents nearby.</p>
+                        </div>
+                        <span class="text-xs font-semibold font-mono bg-matcha/10 text-matcha px-2 py-0.5 rounded-full flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-matcha animate-ping"></span> Live Activity Stream
+                        </span>
+                    </div>
+
+                    <div id="simulated-chat-messages-container" class="flex-1 overflow-y-auto space-y-3 pr-2 mb-4">
+                    </div>
+
+                    <form id="simulated-chat-input-form" onsubmit="handleUserChatBroadcastSubmission(event)" class="flex gap-2 pt-2 border-t border-glassBorder">
+                        <input type="text" id="chat-user-message-field" placeholder="Type a message to join the local simulated chat lounge..." class="flex-1 bg-cream/80 border border-glassBorder rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-caramel" required>
+                        <button type="submit" class="bg-mocha hover:bg-coffeeDark text-cream px-5 py-2 rounded-xl text-sm font-semibold shadow-sm transition-all flex items-center gap-1">
+                            Send <i class="fa-solid fa-paper-plane text-xs"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="col-span-12 md:col-span-5 glass-panel rounded-2xl p-5 flex flex-col h-[580px] border-l border-glassBorder bg-cream/40">
+                    <div class="border-b border-glassBorder pb-3 mb-3">
+                        <h3 class="font-display font-semibold text-xl text-espresso flex items-center gap-2">
+                            <i class="fa-solid fa-robot text-matcha"></i> LINK Suburb AI Guide
+                        </h3>
+                        <p class="text-xs text-mocha/70">Expert AI bot programmed with local knowledge about all suburbs.</p>
+                    </div>
+
+                    <div id="ai-chat-messages-display-node" class="flex-1 overflow-y-auto space-y-3 pr-1 mb-3 text-xs leading-relaxed">
+                        <div class="p-3 bg-white/90 border border-glassBorder rounded-xl shadow-xs">
+                            <span class="font-bold text-matcha"><i class="fa-solid fa-robot"></i> AI Guide Bot</span>
+                            <p class="mt-1 text-mocha">Hello! Choose one of my quick-select questions below to instantly retrieve localized details tailored to your chosen area!</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5 border-t border-glassBorder pt-3">
+                        <span class="text-[10px] uppercase font-bold text-caramel tracking-wider block mb-1">Click a Preset Question to Ask AI:</span>
+                        <div class="grid grid-cols-1 gap-1.5">
+                            <button onclick="dispatchAIPresetQuestionWorkflow('q1')" class="text-left w-full px-3 py-2 bg-white/70 hover:bg-caramel/10 border border-glassBorder text-espresso font-medium rounded-xl text-xs transition-all duration-150 flex items-center justify-between">
+                                <span id="preset-q1-label">What is this suburb famous for?</span> <i class="fa-solid fa-circle-question text-caramel"></i>
+                            </button>
+                            <button onclick="dispatchAIPresetQuestionWorkflow('q2')" class="text-left w-full px-3 py-2 bg-white/70 hover:bg-caramel/10 border border-glassBorder text-espresso font-medium rounded-xl text-xs transition-all duration-150 flex items-center justify-between">
+                                <span id="preset-q2-label">Show me top local recommendations</span> <i class="fa-solid fa-circle-question text-caramel"></i>
+                            </button>
+                            <button onclick="dispatchAIPresetQuestionWorkflow('q3')" class="text-left w-full px-3 py-2 bg-white/70 hover:bg-caramel/10 border border-glassBorder text-espresso font-medium rounded-xl text-xs transition-all duration-150 flex items-center justify-between">
+                                <span id="preset-q3-label">Are there any current alerts or updates?</span> <i class="fa-solid fa-circle-question text-caramel"></i>
+                            </button>
+                            <button onclick="dispatchAIPresetQuestionWorkflow('q4')" class="text-left w-full px-3 py-2 bg-white/70 hover:bg-caramel/10 border border-glassBorder text-espresso font-medium rounded-xl text-xs transition-all duration-150 flex items-center justify-between">
+                                <span id="preset-q4-label">Tell me a fun local historical fact!</span> <i class="fa-solid fa-circle-question text-caramel"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="view-marketplace" class="hidden grid grid-cols-12 gap-6">
+                <div class="col-span-12 lg:col-span-4 glass-panel rounded-2xl p-5 h-fit">
+                    <h4 class="font-display font-semibold text-lg text-espresso border-b border-glassBorder pb-2 mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-plus text-caramel"></i> List a Free / Swap Item
+                    </h4>
+                    <form id="marketplace-posting-form" onsubmit="handleMarketplaceItemSubmission(event)" class="space-y-3">
+                        <div>
+                            <label class="text-[10px] uppercase font-bold text-caramel block mb-1">Item Title</label>
+                            <input type="text" id="market-item-title" placeholder="e.g., Retro Ceramic Coffee Cups" class="w-full text-xs p-2.5 rounded-xl border border-glassBorder bg-cream/80 focus:ring-2 focus:ring-caramel focus:outline-none" required>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[10px] uppercase font-bold text-caramel block mb-1">Category</label>
+                                <select id="market-item-category" class="w-full text-xs p-2.5 rounded-xl border border-glassBorder bg-cream focus:outline-none">
+                                    <option value="Appliances">Appliances</option>
+                                    <option value="Books">Books</option>
+                                    <option value="Furniture">Furniture</option>
+                                    <option value="Garden">Garden</option>
+                                    <option value="Clothing">Clothing</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] uppercase font-bold text-caramel block mb-1">Condition</label>
+                                <select id="market-item-condition" class="w-full text-xs p-2.5 rounded-xl border border-glassBorder bg-cream focus:outline-none">
+                                    <option value="Excellent">Excellent</option>
+                                    <option value="Like New">Like New</option>
+                                    <option value="Good">Good</option>
+                                    <option value="Fair">Fair</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[10px] uppercase font-bold text-caramel block mb-1">Value or Swap Expectation</label>
+                            <input type="text" id="market-item-price" placeholder="Free, $10, or Swap for Tea" class="w-full text-xs p-2.5 rounded-xl border border-glassBorder bg-cream/80 focus:ring-2 focus:ring-caramel focus:outline-none" required>
+                        </div>
+                        <button type="submit" class="w-full py-2 bg-mocha hover:bg-espresso text-cream text-xs font-bold rounded-xl shadow-sm transition-all">
+                            Publish Swap Listing
+                        </button>
+                    </form>
+                </div>
+
+                <div class="col-span-12 lg:col-span-8 glass-panel rounded-2xl p-5">
+                    <div class="flex items-center justify-between border-b border-glassBorder pb-3 mb-4">
+                        <h3 class="font-display font-semibold text-xl text-espresso"><i class="fa-solid fa-cart-shopping text-caramel"></i> Free Swap &amp; Market Board</h3>
+                        <span class="text-xs bg-caramel/10 text-caramel px-3 py-1 rounded-lg font-medium">Local Suburb Exchange Items</span>
+                    </div>
+                    <div id="marketplace-cards-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-map" class="hidden grid grid-cols-12 gap-6">
+                <div class="col-span-12 lg:col-span-8 glass-panel rounded-2xl p-5">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-glassBorder pb-2 mb-4 gap-2">
+                        <div>
+                            <h3 class="font-display font-semibold text-xl text-espresso flex items-center gap-2">
+                                <i class="fa-solid fa-map-location-dot text-matcha"></i> Infrastructure Coordinates &amp; Local Loops
+                            </h3>
+                            <p class="text-xs text-mocha/70">Interactive geometric visualization matching facilities and fitness routes.</p>
+                        </div>
+                        <div class="flex gap-1.5 flex-wrap">
+                            <button onclick="filterSelectedMapTracks('all')" id="track-btn-all" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border bg-mocha text-cream transition-all">All</button>
+                            <button onclick="filterSelectedMapTracks('walking')" id="track-btn-walking" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-glassBorder text-espresso hover:bg-caramel/10 transition-all">🚶 Walking</button>
+                            <button onclick="filterSelectedMapTracks('jogging')" id="track-btn-jogging" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-glassBorder text-espresso hover:bg-matcha/10 transition-all">🏃 Jogging</button>
+                            <button onclick="filterSelectedMapTracks('cycling')" id="track-btn-cycling" class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-glassBorder text-espresso hover:bg-mocha/10 transition-all">🚴 Cycling</button>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full h-[440px] bg-latte/40 rounded-xl border border-glassBorder flex items-center justify-center overflow-hidden">
+                        <div class="absolute inset-0 opacity-15 grid grid-cols-12 gap-1 pointer-events-none">
+                            <div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div>
+                            <div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div><div class="border-r border-b border-mocha"></div>
+                        </div>
+
+                        <svg id="map-canvas-routes-svg" class="absolute inset-0 w-full h-full pointer-events-auto" style="z-index: 5;">
+                            </svg>
+
+                        <div id="map-canvas-pins-overlay-container" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 10;">
+                        </div>
+                        
+                        <div class="absolute bottom-4 right-4 bg-white/95 border border-glassBorder rounded-lg p-2 text-[10px] shadow-sm space-y-1 z-10">
+                            <span class="font-bold block text-espresso uppercase tracking-wider mb-1">Map Guide Indicator</span>
+                            <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-caramel rounded-full"></span> Café Core Hub</div>
+                            <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-matcha rounded-full"></span> Park/Recreation Space</div>
+                            <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-mocha rounded-full"></span> Transit Depot Hub</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-4 space-y-4">
+                    <div class="glass-panel rounded-2xl p-5 bg-white/90">
+                        <h4 class="font-display font-semibold text-lg text-espresso border-b border-glassBorder pb-2 flex items-center gap-1.5">
+                            <i class="fa-solid fa-route text-caramel"></i> Selected Loop Explorer
+                        </h4>
+                        <div id="route-explorer-display-fallback" class="py-10 text-center text-xs text-mocha/60">
+                            <i class="fa-solid fa-hand-pointer text-xl text-caramel/40 block mb-2"></i>
+                            Click any highlighted path line loop inside the map grid canvas to analyze local trail records.
+                        </div>
+                        <div id="route-explorer-display-panel" class="hidden space-y-4 pt-2">
+                            <div>
+                                <span id="route-stat-badge" class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded text-white bg-matcha">Walking Loop</span>
+                                <h5 id="route-stat-name" class="font-display font-bold text-xl text-espresso mt-1">Trail Name</h5>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2 text-center">
+                                <div class="bg-mocha/5 p-2 rounded-xl border border-glassBorder">
+                                    <span class="text-[9px] font-bold uppercase tracking-wide text-caramel block">Distance</span>
+                                    <span id="route-stat-dist" class="text-sm font-bold text-espresso font-mono">1.2 km</span>
+                                </div>
+                                <div class="bg-mocha/5 p-2 rounded-xl border border-glassBorder">
+                                    <span class="text-[9px] font-bold uppercase tracking-wide text-caramel block">Est Time</span>
+                                    <span id="route-stat-time" class="text-sm font-bold text-espresso font-mono">15m</span>
+                                </div>
+                                <div class="bg-mocha/5 p-2 rounded-xl border border-glassBorder">
+                                    <span class="text-[9px] font-bold uppercase tracking-wide text-caramel block">Safety</span>
+                                    <span id="route-stat-safe" class="text-xs font-bold text-matcha flex items-center justify-center gap-0.5">Elite <i class="fa-solid fa-circle-check text-[9px]"></i></span>
+                                </div>
+                            </div>
+                            <div class="p-2.5 bg-cream rounded-xl border border-glassBorder">
+                                <span class="text-[10px] font-bold uppercase text-caramel block mb-0.5">Path Details &amp; Environment</span>
+                                <p id="route-stat-desc" class="text-xs text-mocha/80 leading-relaxed">Path information details placeholder context rendering string logic mapping array records.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-bulletin" class="hidden grid grid-cols-12 gap-6">
+                <div class="col-span-12 lg:col-span-4 glass-panel rounded-2xl p-5 h-fit">
+                    <h4 class="font-display font-semibold text-lg text-espresso border-b border-glassBorder pb-2 mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-pen-to-square text-caramel"></i> Pin a New Bulletin Notice
+                    </h4>
+                    <form id="bulletin-notice-form" onsubmit="handleBulletinNoticeSubmission(event)" class="space-y-3">
+                        <div>
+                            <label class="text-[10px] uppercase font-bold text-caramel block mb-1">Notice Category</label>
+                            <select id="bulletin-input-category" class="w-full text-xs p-2.5 rounded-xl border border-glassBorder bg-cream focus:ring-2 focus:ring-caramel focus:outline-none">
+                                <option value="Community Event">👥 Community Event</option>
+                                <option value="Council Notice">🏛️ Council Notice</option>
+                                <option value="General Advisory">⚠️ General Advisory</option>
+                                <option value="Lost &amp; Found">🔍 Lost &amp; Found</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] uppercase font-bold text-caramel block mb-1">Notice Heading Title</label>
+                            <input type="text" id="bulletin-input-title" placeholder="e.g., Missing Bicycle Near Plaza Entry" class="w-full text-xs p-2.5 rounded-xl border border-glassBorder bg-cream/80 focus:ring-2 focus:ring-caramel focus:outline-none" required>
+                        </div>
+                        <div>
+                            <label class="text-[10px] uppercase font-bold text-caramel block mb-1">Detailed Message Context</label>
+                            <textarea id="bulletin-input-text" rows="4" placeholder="Share core schedule timings, contact coordinates, or essential instructions securely..." class="w-full text-xs p-2.5 rounded-xl border border-glassBorder bg-cream/80 focus:ring-2 focus:ring-caramel focus:outline-none" required></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-2 bg-mocha hover:bg-espresso text-cream text-xs font-bold rounded-xl shadow-sm transition-all">
+                            Post to Bulletin Board
+                        </button>
+                    </form>
+                </div>
+
+                <div class="col-span-12 lg:col-span-8 glass-panel rounded-2xl p-5">
+                    <h3 class="font-display font-semibold text-xl text-espresso border-b border-glassBorder pb-2 mb-4"><i class="fa-solid fa-clipboard text-caramel"></i> Council Notices &amp; Community Bulletin</h3>
+                    <div id="bulletin-board-notices-container" class="space-y-3">
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <div id="global-application-toast-banner" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 bg-espresso text-cream text-xs font-bold font-mono px-5 py-3 rounded-xl shadow-xl border border-caramel/20 transition-all duration-300 max-w-sm flex items-center gap-2">
+        <i class="fa-solid fa-circle-info text-caramel"></i> <span id="toast-message-string-node">System Notice Activated Successfully.</span>
+    </div>
+
+    <script>
+        // GLOBAL CENTRAL MEMORY STORAGE STATE OBJECT
+        const state = {
+            currentSuburb: 'Strathfield',
+            activeTab: 'chat',
+            voiceReaderEnabled: false,
+            highContrast: false,
+            brailleMode: false,
+            textSize: 16,
+            chatIntervalTimerId: null,
+            activeTrackFilter: 'all'
+        };
+
+        // ENHANCED DATABASE STORE: DATA STRUCTURING BY SUBURB ID
+        const neighborhoodDynamicRegistryDB = {
+            'Strathfield': {
+                description: 'A beautiful premier transport residential and education hub nestled securely in the Inner West network pipeline.',
+                population: '25,810 Residents',
+                chatHistory: [
+                    { sender: 'Sarah K.', avatar: '👩‍🦰', text: 'Has anyone seen the orange tabby cat near Albert Rd? He looks a bit lost.' },
+                    { sender: 'Uncle Bob', avatar: '👨‍🦳', text: 'Ah Sarah, I saw him lounging outside the bakery. He belongs to the florist, completely safe!' },
+                    { sender: 'Sarah K.', avatar: '👩‍🦰', text: 'Oh thank goodness! I was worried.' },
+                    { sender: 'Ji-Woo Park', avatar: '👨‍🎓', text: 'By the way, the new Korean BBQ joint just opened near the station. Free extra sides tonight!' }
+                ],
+                chatSimulatedRepliesPool: [
+                    { sender: 'CoffeeLover99', avatar: '☕', text: 'Oh sign me up! Is there a long queue forming yet near Albert Rd?' },
+                    { sender: 'Ji-Woo Park', avatar: '👨‍🎓', text: 'Growing fast! Better get down here before the dinner rush.' },
+                    { sender: 'TrainCommuter', avatar: '🚆', text: 'Express train to CBD just left platform 3, completely empty for anyone traveling!' },
+                    { sender: 'Flora_Garden', avatar: '🌻', text: 'The community flower boxes outside the plaza are looking gorgeous today.' },
+                    { sender: 'Uncle Bob', avatar: '👨‍🦳', text: 'Anyone got a spare workshop ladder I could borrow for Saturday morning yard trim?' }
+                ],
+                marketplace: [
+                    { title: 'HSC Study Guide Set', condition: 'Like New', price: 'Free', category: 'Books' },
+                    { title: 'Solid Wood Dining Stools (x2)', condition: 'Good', price: '$20', category: 'Furniture' },
+                    { title: 'Electric Rice Cooker', condition: 'Excellent', price: '$15', category: 'Appliances' }
+                ],
+                mapPins: [
+                    { name: 'Strathfield Plaza Cafes', type: 'cafe', top: '35%', left: '40%' },
+                    { name: 'Strathfield Central Parklands', type: 'park', top: '65%', left: '25%' },
+                    { name: 'Major Rail Nexus Intermediary', type: 'transit', top: '20%', left: '70%' }
+                ],
+                // EXTENDED INFRASTRUCTURE PATH LOOPS DATA LAYER MODULE
+                routes: [
+                    { id: 'strath-walk-1', name: 'Albert Road Café Promenade', type: 'walking', dist: '1.4 km', time: '18 mins', safe: 'High', stroke: '#a06e52', pathD: 'M 50,150 Q 150,120 280,160 T 450,150', desc: 'Fully paved urban path winding past premier breakfast cafes and colonial architecture. High ambient lighting.' },
+                    { id: 'strath-jog-1', name: 'Redmire Oval Fitness Circuit', type: 'jogging', dist: '3.1 km', time: '25 mins', safe: 'Elite', stroke: '#4c704b', pathD: 'M 100,280 C 180,200 320,220 400,320 S 220,420 100,280', desc: 'Soft-soil running loop tracing the edge of Strathfield parklands. Features dedicated water fountains.' },
+                    { id: 'strath-cycle-1', name: 'Inner West Education Nexus Path', type: 'cycling', dist: '5.8 km', time: '20 mins', safe: 'Good', stroke: '#3d230d', pathD: 'M 20,80 L 150,90 L 300,50 L 520,100 L 680,180', desc: 'On-road green cycle lanes connecting the railway hub directly down to regional high school sectors.' }
+                ],
+                bulletin: [
+                    { category: 'Council Notice', title: 'Raw Square Pedestrian Path Upgrades', text: 'Minor lane blockages expected from Tuesday morning during concrete paving updates.' },
+                    { category: 'Community Event', title: 'Weekend Local Book Swap Meetup', text: 'Bring old novels to the plaza gazebo structure this Sunday afternoon at 2 PM!' }
+                ],
+                aiData: {
+                    q1: "What is this suburb famous for?",
+                    a1: "Strathfield is highly famous for its premier educational institutional hubs, stunning heritage historic estates, and being a major central rail transit network nexus alongside an unmatched, bustling Korean dining precinct culture!",
+                    q2: "Show me top local recommendations",
+                    a2: "Top Spots: Feast on authentic charcoal meats along Albert Road, access quick shopping items inside Strathfield Plaza, or sit back under the shaded trees inside the grand Strathfield Park boundary grids.",
+                    q3: "Are there any current alerts or updates?",
+                    a3: "Current Status: Minor construction adjustments along Raw Square. Rail systems running regularly with expected routine late-night track maintenance planned for Sunday evening.",
+                    q4: "Tell me a fun local historical fact!",
+                    a4: "History Byte: Strathfield was originally incorporated back in 1885 under the name 'Redmire'. It was later renamed after 'Strathfield House', a gorgeous private mansion owned by a prominent early settler!"
+                }
+            },
+            'Burwood': {
+                description: 'A vibrant commercial destination packed with legendary night food markets and scenic heritage parks.',
+                population: '40,220 Residents',
+                chatHistory: [
+                    { sender: 'Chloe T.', avatar: '👩', text: 'Burwood Chinatown is absolutely buzzing tonight! The smell of spicy skewers is unreal.' },
+                    { sender: 'Marcus L.', avatar: '👨', text: 'Are the dessert queues massive? Trying to decide if I head over to grab milk tea.' },
+                    { sender: 'Chloe T.', avatar: '👩', text: 'A bit long, but the staff moves super fast. Totally worth a 5-minute wait.' }
+                ],
+                chatSimulatedRepliesPool: [
+                    { sender: 'Auntie Mei', avatar: '👵', text: 'Don\'t forget tomorrow morning is our community tai chi meetup in Burwood Park at 7am!' },
+                    { sender: 'EcoDave', avatar: '🌱', text: 'I\'ll be joining you Auntie Mei! Bringing extra compost bags for anyone who needs items for their gardens.' },
+                    { sender: 'Foodie_Burwood', avatar: 'Dumplings', text: 'Just discovered a spectacular hidden hand-pulled noodle shop in the rear corridor arcade.' },
+                    { sender: 'Marcus L.', avatar: '👨', text: 'Westfield parking is free for the first 2 hours, but it took me a few loops to secure an open bay.' },
+                    { sender: 'Auntie Mei', avatar: '👵', text: 'The spring roses near the park pavilion smell so sweet right now, go take a stroll.' }
+                ],
+                marketplace: [
+                    { title: 'Chinatown Food Coupon Voucher', condition: 'Valid', price: '$5', category: 'Tokens' },
+                    { title: 'Vintage Leather Jacket', condition: 'Fair', price: '$35', category: 'Clothing' },
+                    { title: 'Indoor Monstera Plant Pot', condition: 'Healthy', price: 'Free', category: 'Garden' }
+                ],
+                mapPins: [
+                    { name: 'Chinatown Hawker Arcade Alley', type: 'cafe', top: '45%', left: '55%' },
+                    { name: 'Historic Burwood Public Park', type: 'park', top: '30%', left: '20%' },
+                    { name: 'Burwood Bus/Rail Central Gates', type: 'transit', top: '70%', left: '45%' }
+                ],
+                routes: [
+                    { id: 'burwood-walk-1', name: 'Chinatown Lantern Alley Trail', type: 'walking', dist: '0.9 km', time: '12 mins', safe: 'High', stroke: '#a06e52', pathD: 'M 200,300 L 250,320 L 380,290 L 410,380', desc: 'Bustling pedestrian run through active night markets. Ideal for leisurely evening sightseeing tours.' },
+                    { id: 'burwood-jog-1', name: 'Heritage Bandstand Park Circuit', type: 'jogging', dist: '2.2 km', time: '16 mins', safe: 'Elite', stroke: '#4c704b', pathD: 'M 50,100 Q 150,40 300,100 T 550,100 T 400,220 Z', desc: 'Scenic loop wrapped safely around the historical 1882 bandstand structure. Beautiful floral borders.' }
+                ],
+                bulletin: [
+                    { category: 'Advisory', title: 'Burwood Road Evening Density', text: 'Expect slower traffic streams on Friday and Saturday nights due to high night-market market patron turnout.' },
+                    { category: 'Recreation', title: 'Outdoor Music Performance at the Bandstand', text: 'Live youth acoustic bands playing for free in the park pavilion this coming Saturday from noon.' }
+                ],
+                aiData: {
+                    q1: "What is this suburb famous for?",
+                    a1: "Burwood is celebrated for its incredible, multi-tiered Burwood Chinatown hawker street market grids, sprawling retail storefront operations at Westfield, and an highly dynamic multicultural evening food environment.",
+                    q2: "Show me top local recommendations",
+                    a2: "Top Spots: Indulge in street food inside Chinatown lanes, unwind beside the beautiful central pond layout within Burwood Park, or grab high-quality pastries down Burwood Road.",
+                    q3: "Are there any current alerts or updates?",
+                    a3: "Current Status: High evening vehicle density near railway commuter zones. Council sanitization teams operating in early morning sweeps around commercial corridors.",
+                    q4: "Tell me a fun local historical fact!",
+                    a4: "History Byte: Burwood Park was dedicated for public preservation all the way back in 1882, and it proudly retains its original vintage bandstand pavilion!",
+                }
+            },
+            'Parramatta': {
+                description: 'Sydney\'s bustling secondary CBD anchor combining corporate powerhouses with rich riverfront histories.',
+                population: '31,540 Residents',
+                chatHistory: [
+                    { sender: 'Liam Ryan', avatar: '🧔', text: 'The Rivercat ferry ride back home from the CBD was slightly delayed, but the sunset scenery was elite.' },
+                    { sender: 'Priya Sharma', avatar: '👩‍⚕️', text: 'Parramatta Square looks gorgeous tonight. They have gorgeous colorful lights projected on the PHIVE building.' }
+                ],
+                chatSimulatedRepliesPool: [
+                    { sender: 'TechGuru_9', avatar: '👨‍💻', text: 'Is anyone working remotely from the PHIVE hub tomorrow? Excellent high-speed public Wi-Fi access spots there.' },
+                    { sender: 'Priya Sharma', avatar: '👩‍⚕️', text: 'Yes, I\'ll be operating from the study desk zones around midday! Let\'s secure lunch along Eat Street.' },
+                    { sender: 'EelsFanatic', avatar: '🏉', text: 'Massive energetic crowd heading down the avenue toward CommBank stadium. Let\'s go!' },
+                    { sender: 'Liam Ryan', avatar: '🧔', text: 'Does anyone know if the light rail street testing schedules have altered for the coming weekend grid?' },
+                    { sender: 'GovEmployee', avatar: '👔', text: 'They appear to be running test trains every 8 minutes routinely, watch your steps when crossing lines!' }
+                ],
+                marketplace: [
+                    { title: 'Ergonomic Desk Office Chair', condition: 'Excellent', price: '$50', category: 'Office' },
+                    { title: 'CommBank Stadium Match Passes', condition: 'Unused', price: '$40', category: 'Tickets' },
+                    { title: 'Road Bicycle 10-Speed', condition: 'Needs Tuneup', price: 'Free', category: 'Sport' }
+                ],
+                mapPins: [
+                    { name: 'Church Street Eat Street Row', type: 'cafe', top: '25%', left: '50%' },
+                    { name: 'Parramatta Park Historical Grounds', type: 'park', top: '40%', left: '15%' },
+                    { name: 'Rivercat Ferry Terminal Wharfs', type: 'transit', top: '15%', left: '80%' }
+                ],
+                routes: [
+                    { id: 'parra-walk-1', name: 'Rivercat Boardwalk Esplanade', type: 'walking', dist: '2.5 km', time: '35 mins', safe: 'High', stroke: '#a06e52', pathD: 'M 550,60 L 400,65 L 250,70 L 100,85', desc: 'Breezy river-adjacent path with complete illumination, linking ferry docks to commercial corporate parks.' },
+                    { id: 'parra-cycle-1', name: 'Governor Phillip Historic Loop', type: 'cycling', dist: '8.4 km', time: '30 mins', safe: 'Elite', stroke: '#3d230d', pathD: 'M 100,180 Q 80,300 120,400 T 300,350 T 200,180', desc: 'Expansive loop inside historical park borders. Completely separated from public vehicle traffic.' }
+                ],
+                bulletin: [
+                    { category: 'Transit Update', title: 'Light Rail Testing Operations Active', text: 'Ongoing safety testing cycles active across the CBD center lines. Keep clear of track lanes and follow traffic direction rules.' },
+                    { category: 'Exhibition', title: 'Heritage Tours at Old Government House', text: 'Discover local early settlement architecture with weekend walking tours starting from the museum entry gates.' }
+                ],
+                aiData: {
+                    q1: "What is this suburb famous for?",
+                    a1: "Parramatta is famous as Sydney’s dynamic energetic 'Second CBD', housing crucial colonial heritage milestones, massive corporate office layouts, a winding river ferry run, and the Eat Street food lane system.",
+                    q2: "Show me top local recommendations",
+                    a2: "Top Spots: Enjoy fine alfresco dining along Church Street, cycle through history inside Parramatta Park, or catch an independent play production inside the historic Riverside Theatres.",
+                    q3: "Are there any current alerts or updates?",
+                    a3: "Current Status: Active light rail validation vehicles testing paths across main roads—please exercise standard caution. Local match days see rapid parking structural fills.",
+                    q4: "Tell me a fun local historical fact!",
+                    a4: "History Byte: Established by Governor Arthur Phillip in late 1788, Parramatta represents the oldest inland European urban settlement center in Australia, originally founded under the name 'Rose Hill'!"
+                }
+            },
+            'Newtown': {
+                description: 'An eclectic, fiercely original arts haven filled with premium alternative street art and fashion.',
+                population: '15,030 Residents',
+                chatHistory: [
+                    { sender: 'Ziggy Wild', avatar: '🧑‍🎤', text: 'Just observed an exceptional street mural graffiti artist completing an installation on Enmore Road.' },
+                    { sender: 'Luna\'s Human', avatar: '👩‍🎨', text: 'Friendly reminder: submissions for our communal street garage book swap index wrap up this Friday night.' }
+                ],
+                chatSimulatedRepliesPool: [
+                    { sender: 'VintageVibe', avatar: '🕶️', text: 'Oh amazing initiative! I have three entire boxes of pristine classic indie records ready to contribute to the pool.' },
+                    { sender: 'Ziggy Wild', avatar: '🧑‍🎤', text: 'Records? Please let me get a quick look at that selection before the public drops in!' },
+                    { sender: 'CoffeeLover99', avatar: '☕', text: 'The special alternative milk cold brew varieties along King St are literal perfection on a warm day.' },
+                    { sender: 'VeganPower', avatar: '🥑', text: 'The famous local strawberry watermelon pastry shop sold out their daily run by 1 PM. I am totally devastated!' },
+                    { sender: 'Luna\'s Human', avatar: '👩‍🎨', text: 'Spotted a lost cluster of house keys resting on the station steps. Handed them over directly to the platform master.' }
+                ],
+                marketplace: [
+                    { title: 'Retro Wooden Vinyl Player Turntable', condition: 'Vintage', price: '$80', category: 'Audio' },
+                    { title: 'Doc Martens Boots (Size 9)', condition: 'Scuffed', price: '$30', category: 'Shoes' },
+                    { title: 'Arthouse Canvas Framed Painting', condition: 'Handmade', price: 'Free', category: 'Decor' }
+                ],
+                mapPins: [
+                    { name: 'King Street Eclectic Cafes Row', type: 'cafe', top: '50%', left: '35%' },
+                    { name: 'Camperdown Memorial Rest Park', type: 'park', top: '20%', left: '60%' },
+                    { name: 'Newtown Station Main Entry Hub', type: 'transit', top: '75%', left: '30%' }
+                ],
+                routes: [
+                    { id: 'newtown-walk-1', name: 'Enmore Street Art Safari Track', type: 'walking', dist: '1.8 km', time: '28 mins', safe: 'Good', stroke: '#a06e52', pathD: 'M 180,320 C 150,220 220,150 350,220 S 400,120 480,90', desc: 'Eclectic wandering route through historic lanes showcasing protected bohemian community wall murals.' },
+                    { id: 'newtown-jog-1', name: 'Camperdown Rest Grassy Circuit', type: 'jogging', dist: '1.5 km', time: '11 mins', safe: 'High', stroke: '#4c704b', pathD: 'M 400,80 L 500,70 L 520,150 L 410,140 Z', desc: 'Flat, high-visibility green clearing pathway. Packed with friendly local dogs and shade trees.' }
+                ],
+                bulletin: [
+                    { category: 'Enforcement', title: 'King Street Clearway Parking Penalties', text: 'Strict towing enforcement operations initiate daily at 3:00 PM on the dot. Parked cars are moved aggressively.' },
+                    { category: 'Art Initiative', title: 'Laneway Wall Beautification Grants', text: 'Property operators can apply directly to council for creative mural painting financial assistance packages this month.' }
+                ],
+                aiData: {
+                    q1: "What is this suburb famous for?",
+                    a1: "Newtown is globally recognized for its highly expressive alternative bohemian subcultures, amazing street art mural canvas views, thrift stores, live musical stages, and highly inclusive global vegan culinary layouts.",
+                    q2: "Show me top local recommendations",
+                    a2: "Top Spots: Indulge in an afternoon shopping walk down King Street, attend a film viewing at the Dendy Cinema complex, or lounge with live acoustic bands out on the lawn at Camperdown Rest Park.",
+                    q3: "Are there any current alerts or updates?",
+                    a3: "Current Status: Tow-away zones are rigorously cleared along King St corridors. Expect high pedestrian crowds outside the station gates during weekend evenings.",
+                    q4: "Tell me a fun local historical fact!",
+                    a4: "History Byte: Newtown acquired its official identity back in 1832, derived purely from a neighborhood grocery storefront established by an early merchant named John Webster called the 'New Town Stores'!"
+                }
+            }
+        };
+
+        // BRAILLE TRANSLATION MATRIX MAP DICTIONARY
+        const brailleTransformationMap = {
+            'a': '⠁', 'b': '⠃', 'c': '⠉', 'd': '⠙', 'e': '⠑', 'f': '⠋', 'g': '⠛', 'h': '⠓', 'i': '⠊', 'j': '⠚',
+            'k': '⠕', 'l': '⠇', 'm': '⠍', 'n': '⠝', 'o': '⠕', 'p': '⠏', 'q': '⠟', 'r': '⠗', 's': '⠎', 't': '⠞',
+            'u': '⠥', 'v': '⠪', 'w': '⠺', 'x': '⠭', 'y': '⠽', 'z': '⠵',
+            '0': '⠼⠚', '1': '⠼⠁', '2': '⠼⠃', '3': '⠼⠉', '4': '⠼⠙', '5': '⠼⠑', '6': '⠼⠋', '7': '⠼⠛', '8': '⠼⠓', '9': '⠼⠊',
+            ' ': ' ', '.': '⠨', ',': '⠂', '!': '⠹', '?': '⠦', ';': '⠆', ':': '⠒', '-': '⠤', '(': '⠦', ')': '⠴'
+        };
+
+        const originalDOMTextMemoryStore = new Map();
+
+        // 1. INIT ON SYSTEM LOAD ENTRY POINT
+        window.addEventListener('DOMContentLoaded', () => {
+            configureApplicationSystemTimeNode();
+            initializeTextToSpeechHoverAnalytics();
+            executeContextShift('Strathfield'); 
+            initAutomatedLiveSimulatedNeighborChatInterval();
+        });
+
+        // REFRESH TIME METHOD
+        function configureApplicationSystemTimeNode() {
+            const displayOptions = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+            document.getElementById("system-time-node").textContent = `📅 Local Hub Session: ${new Date().toLocaleDateString('en-AU', displayOptions)}`;
+        }
+
+        // TAB VIEW SWITCHER MACHINE LOGIC
+        function switchApplicationViewTab(targetViewId) {
+            state.activeTab = targetViewId;
+            const views = ['dashboard', 'chat', 'marketplace', 'map', 'bulletin'];
+            
+            views.forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                const btn = document.getElementById(`tab-btn-${v}`);
+                if (v === targetViewId) {
+                    el.classList.remove('hidden');
+                    if (v === 'chat' || v === 'bulletin' || v === 'marketplace' || v === 'map') el.classList.add('grid');
+                    btn.className = "px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-mocha text-cream shadow-sm";
+                } else {
+                    el.classList.add('hidden');
+                    el.classList.remove('grid');
+                    btn.className = "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-mocha hover:bg-cream/50";
+                }
+            });
+
+            showApplicationSystemToast(`Switched active view focus grid to: ${targetViewId.toUpperCase()}`);
+            
+            // If braille mode is globally on, re-apply translations across newly uncovered tabs
+            if (state.brailleMode) {
+                setTimeout(() => applyBrailleDOMTransformationWalk(true), 50);
+            }
+        }
+
+        // CENTRAL ROUTER: REGIONAL CONTEXT SWITCH CHANGES ALL VIEWS INSTANTLY
+        function executeContextShift(chosenSuburbName) {
+            state.currentSuburb = chosenSuburbName;
+            const dataRecord = neighborhoodDynamicRegistryDB[chosenSuburbName];
+            
+            if (!dataRecord) return;
+
+            // Update Left Sidebar Identity Spotlights
+            document.getElementById('spotlight-suburb-title').textContent = chosenSuburbName;
+            document.getElementById('spotlight-suburb-desc').textContent = dataRecord.description;
+            document.getElementById('spotlight-pop').textContent = dataRecord.population;
+
+            // Shift Eco Metrics Counters for visual realism variation per suburb
+            modifyDashboardEcoTrackerMetrics(chosenSuburbName);
+
+            // Clear and Flush Simulated Chat Stream Container with Historical Array data
+            const chatLogBox = document.getElementById('simulated-chat-messages-container');
+            if (chatLogBox) {
+                chatLogBox.innerHTML = '';
+                dataRecord.chatHistory.forEach(msg => {
+                    injectSingleChatMessageToUI(msg.sender, msg.avatar, msg.text, false);
+                });
+                scrollSimulatedChatToBottomContainer();
+            }
+
+            // Clear and Reset AI Bot Assistant Frame Display View
+            const aiLogBox = document.getElementById('ai-chat-messages-display-node');
+            if (aiLogBox) {
+                aiLogBox.innerHTML = `
+                    <div class="p-3 bg-white/90 border border-glassBorder rounded-xl shadow-xs">
+                        <span class="font-bold text-matcha"><i class="fa-solid fa-robot"></i> AI Guide Bot</span>
+                        <p class="mt-1 text-mocha">Hello! I am completely tuned into <strong>${chosenSuburbName}</strong>. Go ahead and select any preset inquiry topic underneath to see localized records!</p>
+                    </div>
+                `;
+            }
+
+            // Flush and Render Context Marketplace Cards
+            renderMarketplaceCards();
+
+            // Flush and Render Map Pins + SVG Route Layers Loops
+            renderMapOverlayPinsAndPathLoops();
+
+            // Flush and Render Public Council Notices Board List
+            renderBulletinNotices();
+
+            showApplicationSystemToast(`Context Shift Executed! Syncing data modules into ${chosenSuburbName}.`);
+
+            // Adapt Braille layout structures if checked
+            if (state.brailleMode) {
+                setTimeout(() => applyBrailleDOMTransformationWalk(true), 50);
+            }
+        }
+
+        // RE-RENDER HELPER LOGICS
+        function renderBulletinNotices() {
+            const container = document.getElementById('bulletin-board-notices-container');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            const list = neighborhoodDynamicRegistryDB[state.currentSuburb].bulletin;
+            // Display latest postings at top
+            [...list].reverse().forEach(note => {
+                const itemNode = document.createElement('div');
+                itemNode.className = "p-4 bg-cream/90 border-l-4 border-caramel border rounded-r-xl space-y-1 shadow-xs animate-fadeIn";
+                itemNode.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-bold uppercase bg-caramel/10 text-caramel px-2 py-0.5 rounded">${note.category}</span>
+                        <h4 class="font-bold text-sm text-espresso">${note.title}</h4>
+                    </div>
+                    <p class="text-xs text-mocha/80 leading-relaxed">${note.text}</p>
+                `;
+                container.appendChild(itemNode);
+            });
+        }
+
+        function renderMarketplaceCards() {
+            const container = document.getElementById('marketplace-cards-grid');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            const items = neighborhoodDynamicRegistryDB[state.currentSuburb].marketplace;
+            [...items].reverse().forEach(item => {
+                const card = document.createElement('div');
+                card.className = "p-4 bg-white/80 border border-glassBorder rounded-xl shadow-xs hover:shadow-md transition-all animate-fadeIn";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-[10px] font-bold uppercase px-2 py-0.5 bg-mocha/10 text-mocha rounded">${item.category}</span>
+                        <span class="text-sm font-bold text-matcha font-mono">${item.price}</span>
+                    </div>
+                    <h4 class="font-semibold text-espresso text-sm">${item.title}</h4>
+                    <p class="text-xs text-caramel font-medium mt-1">Condition: ${item.condition}</p>
+                    <button onclick="showApplicationSystemToast('Item inquiry signal routed to poster safely.')" class="w-full mt-3 text-center py-1.5 bg-mocha hover:bg-espresso text-cream text-xs font-bold rounded-lg transition-colors">Inquire Swap</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // UPGRADE WORKFLOW MAP & PATH RENDERING PIPELINE CONTROLLER
+        function renderMapOverlayPinsAndPathLoops() {
+            const pinContainer = document.getElementById('map-canvas-pins-overlay-container');
+            const svgContainer = document.getElementById('map-canvas-routes-svg');
+            if (!pinContainer || !svgContainer) return;
+
+            pinContainer.innerHTML = '';
+            svgContainer.innerHTML = '';
+
+            const db = neighborhoodDynamicRegistryDB[state.currentSuburb];
+
+            // Render Infrastructure Pins
+            db.mapPins.forEach(pin => {
+                const pinNode = document.createElement('div');
+                pinNode.className = "absolute transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer z-20 pointer-events-auto";
+                pinNode.style.top = pin.top;
+                pinNode.style.left = pin.left;
+                
+                let colorClass = "bg-caramel";
+                if (pin.type === 'park') colorClass = "bg-matcha";
+                if (pin.type === 'transit') colorClass = "bg-mocha";
+
+                pinNode.innerHTML = `
+                    <div class="w-4 h-4 ${colorClass} rounded-full border-2 border-white shadow-md animate-pulse"></div>
+                    <div class="absolute bottom-5 left-1/2 transform -translate-x-1/2 bg-espresso text-cream text-[10px] font-bold px-2 py-0.5 rounded shadow-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-30">
+                        ${pin.name} (${pin.type.toUpperCase()})
+                    </div>
+                `;
+                pinContainer.appendChild(pinNode);
+            });
+
+            // Render Vector Trail Routes via Interactive SVG
+            if (db.routes) {
+                db.routes.forEach(route => {
+                    // Check if filter lets item display
+                    if (state.activeTrackFilter !== 'all' && route.type !== state.activeTrackFilter) return;
+
+                    const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    pathElement.setAttribute('d', route.pathD);
+                    pathElement.setAttribute('stroke', route.stroke);
+                    pathElement.setAttribute('stroke-width', '4');
+                    pathElement.setAttribute('fill', 'none');
+                    pathElement.setAttribute('stroke-linecap', 'round');
+                    pathElement.setAttribute('class', 'cursor-pointer hover:stroke-[6px] transition-all duration-150');
+                    pathElement.style.transition = "stroke-width 0.15s ease";
+                    
+                    // Add interactive tracking click event
+                    pathElement.addEventListener('click', () => {
+                        displayTrackInspectorMetricsDetails(route);
+                    });
+
+                    svgContainer.appendChild(pathElement);
+                });
+            }
+            
+            // Re-hide inspector card info until next user click registers
+            document.getElementById('route-explorer-display-fallback').classList.remove('hidden');
+            document.getElementById('route-explorer-display-panel').classList.add('hidden');
+        }
+
+        function filterSelectedMapTracks(trackType) {
+            state.activeTrackFilter = trackType;
+            const buttons = ['all', 'walking', 'jogging', 'cycling'];
+            
+            buttons.forEach(b => {
+                const el = document.getElementById(`track-btn-${b}`);
+                if (b === trackType) {
+                    el.className = "px-2.5 py-1 text-[11px] font-bold rounded-lg border bg-mocha text-cream transition-all";
+                } else {
+                    el.className = "px-2.5 py-1 text-[11px] font-bold rounded-lg border border-glassBorder text-espresso hover:bg-caramel/10 transition-all";
+                }
+            });
+
+            renderMapOverlayPinsAndPathLoops();
+            showApplicationSystemToast(`Map filters updated to trace: ${trackType.toUpperCase()} tracks.`);
+        }
+
+        function displayTrackInspectorMetricsDetails(routeObj) {
+            document.getElementById('route-explorer-display-fallback').classList.add('hidden');
+            const panel = document.getElementById('route-explorer-display-panel');
+            panel.classList.remove('hidden');
+
+            document.getElementById('route-stat-name').textContent = routeObj.name;
+            document.getElementById('route-stat-dist').textContent = routeObj.dist;
+            document.getElementById('route-stat-time').textContent = routeObj.time;
+            document.getElementById('route-stat-safe').innerHTML = `${routeObj.safe} <i class="fa-solid fa-shield-halved text-matcha ml-1"></i>`;
+            document.getElementById('route-stat-desc').textContent = routeObj.desc;
+
+            const badge = document.getElementById('route-stat-badge');
+            badge.textContent = `${routeObj.type.toUpperCase()} TRACK`;
+            if (routeObj.type === 'walking') badge.className = "text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded text-white bg-caramel";
+            if (routeObj.type === 'jogging') badge.className = "text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded text-white bg-matcha";
+            if (routeObj.type === 'cycling') badge.className = "text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded text-white bg-mocha";
+            
+            showApplicationSystemToast(`Inspecting details: ${routeObj.name}`);
+        }
+
+        // UPGRADE WORKFLOW BULLETIN SUBMISSION FORM PIPELINE
+        function handleBulletinNoticeSubmission(event) {
+            event.preventDefault();
+            
+            const cat = document.getElementById('bulletin-input-category').value;
+            const title = document.getElementById('bulletin-input-title').value.trim();
+            const txt = document.getElementById('bulletin-input-text').value.trim();
+
+            if (!title || !txt) return;
+
+            const targetRegistry = neighborhoodDynamicRegistryDB[state.currentSuburb].bulletin;
+            targetRegistry.push({
+                category: cat,
+                title: title,
+                text: txt
+            });
+
+            // Reset Form Fields cleanly
+            document.getElementById('bulletin-input-title').value = '';
+            document.getElementById('bulletin-input-text').value = '';
+
+            // Re-render UI list layout instantly
+            renderBulletinNotices();
+            showApplicationSystemToast("Notice broadcast successfully appended to local bulletin board structures!");
+        }
+
+        // UPGRADE WORKFLOW MARKETPLACE ITEM SUBMISSION FORM PIPELINE
+        function handleMarketplaceItemSubmission(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('market-item-title').value.trim();
+            const cat = document.getElementById('market-item-category').value;
+            const cond = document.getElementById('market-item-condition').value;
+            const price = document.getElementById('market-item-price').value.trim();
+
+            if (!title || !price) return;
+
+            const targetRegistry = neighborhoodDynamicRegistryDB[state.currentSuburb].marketplace;
+            targetRegistry.push({
+                title: title,
+                category: cat,
+                condition: cond,
+                price: price
+            });
+
+            // Flush input fields
+            document.getElementById('market-item-title').value = '';
+            document.getElementById('market-item-price').value = '';
+
+            renderMarketplaceCards();
+            showApplicationSystemToast("Item posted safely to local swap board grids.");
+        }
+
+        // RANDOM SUBSURB METRIC VARIATION GENERATOR
+        function modifyDashboardEcoTrackerMetrics(suburbName) {
+            const seedMultiplier = suburbName.length;
+            document.getElementById('stat-cups').textContent = Math.floor(112 * seedMultiplier + 450);
+            document.getElementById('stat-books').textContent = Math.floor(34 * seedMultiplier + 120);
+            document.getElementById('stat-km').textContent = Math.floor(140 * seedMultiplier + 620) + " km";
+            document.getElementById('stat-co2').textContent = "-" + Math.floor(35 * seedMultiplier + 110) + " kg";
+        }
+
+        // CHAT UI CONTEXT APPEND WORKFLOW METHODS
+        function injectSingleChatMessageToUI(sender, avatar, text, isUserSent) {
+            const container = document.getElementById('simulated-chat-messages-container');
+            if (!container) return;
+
+            const bubbleWrapper = document.createElement('div');
+            bubbleWrapper.className = `flex items-start space-x-2.5 animate-fadeIn ${isUserSent ? 'justify-end' : ''}`;
+            
+            let processedText = text;
+            if (state.brailleMode) {
+                processedText = text.split('').map(c => brailleTransformationMap[c] || brailleTransformationMap[c.toLowerCase()] || c).join('');
+            }
+
+            bubbleWrapper.innerHTML = `
+                ${!isUserSent ? `<div class="w-8 h-8 rounded-full bg-caramel/20 flex items-center justify-center text-sm shadow-xs">${avatar}</div>` : ''}
+                <div class="max-w-[75%] p-3 rounded-2xl shadow-xs text-xs ${isUserSent ? 'bg-mocha text-cream rounded-tr-none' : 'bg-white text-espresso rounded-tl-none border border-glassBorder'}">
+                    <div class="flex items-center space-x-1.5 font-bold mb-1 ${isUserSent ? 'text-latte' : 'text-caramel'}">
+                        <span>${sender}</span>
+                        <span class="text-[9px] font-normal opacity-60 font-mono">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                    </div>
+                    <p class="leading-relaxed whitespace-pre-wrap select-text-node">${processedText}</p>
+                </div>
+                ${isUserSent ? `<div class="w-8 h-8 rounded-full bg-mocha text-cream flex items-center justify-center text-sm shadow-xs">${avatar}</div>` : ''}
+            `;
+            
+            container.appendChild(bubbleWrapper);
+            scrollSimulatedChatToBottomContainer();
+        }
+
+        function scrollSimulatedChatToBottomContainer() {
+            const container = document.getElementById('simulated-chat-messages-container');
+            if (container) container.scrollTop = container.scrollHeight;
+        }
+
+        // USER CHAT FORM SUBMISSION PIPELINE INTERACTION
+        function handleUserChatBroadcastSubmission(event) {
+            event.preventDefault();
+            const field = document.getElementById('chat-user-message-field');
+            const txt = field.value.trim();
+            if (!txt) return;
+
+            // Append User Item
+            injectSingleChatMessageToUI("You (Neighbor)", "👤", txt, true);
+            field.value = '';
+
+            // Set up a dynamic realistic delayed trigger where a simulated neighbor responds directly back!
+            setTimeout(() => {
+                const currentPool = neighborhoodDynamicRegistryDB[state.currentSuburb].chatSimulatedRepliesPool;
+                const seedRandomIndex = Math.floor(Math.random() * currentPool.length);
+                const randomNeighbor = currentPool[seedRandomIndex];
+                
+                injectSingleChatMessageToUI(
+                    randomNeighbor.sender, 
+                    randomNeighbor.avatar, 
+                    `Hey look, that's a great point regarding our block! ${randomNeighbor.text}`, 
+                    false
+                );
+            }, 1200);
+        }
+
+        // AUTOMATED RECURRING ENGINE: SPINS SEED PHRASES CONTINUOUSLY TO CHAT WINDOW FOR REALISM
+        function initAutomatedLiveSimulatedNeighborChatInterval() {
+            if (state.chatIntervalTimerId) clearInterval(state.chatIntervalTimerId);
+            
+            state.chatIntervalTimerId = setInterval(() => {
+                // Execute background injection only if active tab matches lounge
+                if (state.activeTab !== 'chat') return;
+
+                const currentPool = neighborhoodDynamicRegistryDB[state.currentSuburb].chatSimulatedRepliesPool;
+                if (!currentPool || currentPool.length === 0) return;
+
+                const selectRandomMsg = currentPool[Math.floor(Math.random() * currentPool.length)];
+                
+                // Don't append if message stream has grown overly long
+                const chatContainer = document.getElementById('simulated-chat-messages-container');
+                if (chatContainer && chatContainer.children.length > 20) {
+                    chatContainer.removeChild(chatContainer.children[0]); // cycle stack text nodes gracefully
+                }
+
+                injectSingleChatMessageToUI(selectRandomMsg.sender, selectRandomMsg.avatar, selectRandomMsg.text, false);
+            }, 9000); // Posts an active local response item every 9 seconds automatically
+        }
+
+        // INTERACTIVE SUBURB AI GUIDE SYSTEM: PRESET QUESTIONS TRIGGER SYSTEM
+        function dispatchAIPresetQuestionWorkflow(questionKeyId) {
+            const displayFrame = document.getElementById('ai-chat-messages-display-node');
+            if (!displayFrame) return;
+
+            const activeRecord = neighborhoodDynamicRegistryDB[state.currentSuburb];
+            if (!activeRecord) return;
+
+            const rawQuestionText = activeRecord.aiData[questionKeyId];
+            const rawAnswerText = activeRecord.aiData[questionKeyId.replace('q', 'a')];
+
+            // Render user inquiry message segment bubble representation
+            appendAIHubMessageElementRow("You", "👤", rawQuestionText, "user", null);
+
+            // Append loading indicator element 
+            const processingNodePlaceholderId = "ai-processing-" + Date.now();
+            appendAIHubMessageElementRow("AI Guide Bot", "🤖", "Scanning local records database...", "loading", processingNodePlaceholderId);
+
+            setTimeout(() => {
+                const matchingLoadingElement = document.getElementById(processingNodePlaceholderId);
+                if (matchingLoadingElement) matchingLoadingElement.remove();
+
+                // Append complete automated answer node mapping data records properly
+                appendAIHubMessageElementRow("AI Guide Bot", "🤖", rawAnswerText, "ai", null);
+            }, 750);
+        }
+
+        function appendAIHubMessageElementRow(senderLabel, iconAvatar, textPayload, userClassRole, dynamicUniqueId) {
+            const frame = document.getElementById('ai-chat-messages-display-node');
+            if (!frame) return;
+
+            const bubbleItem = document.createElement('div');
+            bubbleItem.className = `p-3 rounded-xl border animate-fadeIn max-w-[90%] text-xs leading-relaxed ${
+                userClassRole === 'user' 
+                ? 'bg-mocha/5 border-caramel/20 ml-auto text-right' 
+                : 'bg-white border-glassBorder mr-auto'
+            }`;
+            if (dynamicUniqueId) bubbleItem.id = dynamicUniqueId;
+
+            let processedText = textPayload;
+            if (state.brailleMode) {
+                processedText = textPayload.split('').map(c => brailleTransformationMap[c] || brailleTransformationMap[c.toLowerCase()] || c).join('');
+            }
+
+            bubbleItem.innerHTML = `
+                <span class="font-bold flex items-center gap-1 text-[11px] ${userClassRole === 'user' ? 'justify-end text-caramel' : 'text-matcha'}">
+                    ${userClassRole !== 'user' ? `<span>${iconAvatar}</span>` : ''} ${senderLabel} ${userClassRole === 'user' ? `<span>${iconAvatar}</span>` : ''}
+                </span>
+                <p class="mt-1 text-espresso select-text-node font-medium">${processedText}</p>
+            `;
+            
+            frame.appendChild(bubbleItem);
+            frame.scrollTop = frame.scrollHeight;
+        }
+
+        // NAVIGATION ACCESSIBILITY SUITE ACTIONS MOCK ENGINE LOGIC
+        function toggleSpeechSynthesisFeature(isCheckedFlag) {
+            state.voiceReaderEnabled = isCheckedFlag;
+            if (isCheckedFlag) {
+                showApplicationSystemToast("Audio hover screen reader active! Move mouse over texts to parse audio.");
+            } else {
+                if (window.speechSynthesis) window.speechSynthesis.cancel();
+                showApplicationSystemToast("Audio text synthesizer suspended safely.");
+            }
+        }
+
+        function toggleHighContrastThemeMode(isHighContrastActive) {
+            state.highContrast = isHighContrastActive;
+            if (isHighContrastActive) {
+                document.body.classList.add('high-contrast-mode');
+                showApplicationSystemToast("High Contrast Mode Enabled.");
+            } else {
+                document.body.classList.remove('high-contrast-mode');
+                showApplicationSystemToast("Returned styling to aesthetic coffee palette layout rules.");
+            }
+        }
+
+        // DYNAMIC CORE SCALING RESIZER ADJUSTMENT ENGINE
+        function executeDynamicTextScalingAdjustment(newBasePixelSizeValue) {
+            state.textSize = newBasePixelSizeValue;
+            document.getElementById('text-size-indicator').textContent = `${newBasePixelSizeValue}px`;
+            
+            // Apply scale explicitly to main layout node grid framework wrapping layout elements
+            const containerNode = document.getElementById('app-main-layout');
+            if (containerNode) {
+                containerNode.style.fontSize = `${newBasePixelSizeValue}px`;
+            }
+        }
+
+        function toggleSecretDropdownSectionMenu() {
+            const pane = document.getElementById('secret-dropdown-content');
+            const arrow = document.getElementById('secret-chevron-icon');
+            if (pane.classList.contains('hidden')) {
+                pane.classList.remove('hidden');
+                arrow.classList.add('rotate-180');
+            } else {
+                pane.classList.add('hidden');
+                arrow.classList.remove('rotate-180');
+            }
+        }
+
+        // FUNNY ACCESSIBILITY FEATURE: RUNS A TOTAL DOM TREE WALKER ITERATOR REPLACING CHARACTERS
+        function toggleBrailleTransformationMode(isBrailleActive) {
+            state.brailleMode = isBrailleActive;
+            applyBrailleDOMTransformationWalk(isBrailleActive);
+            
+            showApplicationSystemToast(
+                isBrailleActive 
+                ? "⠠⠃⠗⠠⠁⠠⠊⠠⠇⠠⠇⠠⠑ Mode Activated! Matrix code rendering online." 
+                : "Braille Mode deactivated. Restored regular Roman fonts typography."
+            );
+        }
+
+        function applyBrailleDOMTransformationWalk(activate) {
+            function recursiveDOMNodeWalker(currentNode) {
+                if (currentNode.nodeType === Node.TEXT_NODE) {
+                    if (activate) {
+                        // Memorize original pristine spelling structure sequence string if unseen before
+                        if (!originalDOMTextMemoryStore.has(currentNode)) {
+                            originalDOMTextMemoryStore.set(currentNode, currentNode.nodeValue);
+                        }
+                        const baseString = originalDOMTextMemoryStore.get(currentNode);
+                        const transformedBrailleArray = baseString.split('').map(character => {
+                            return brailleTransformationMap[character] || brailleTransformationMap[character.toLowerCase()] || character;
+                        });
+                        currentNode.nodeValue = transformedBrailleArray.join('');
+                    } else {
+                        // Revert and apply pristine values directly back from memory mapping index
+                        if (originalDOMTextMemoryStore.has(currentNode)) {
+                            currentNode.nodeValue = originalDOMTextMemoryStore.get(currentNode);
+                        }
+                    }
+                } else {
+                    // Do not corrupt structural operational elements tags script fields input metrics boxes
+                    const invalidContainers = ['SCRIPT', 'STYLE', 'INPUT', 'TEXTAREA', 'SELECT', 'I', 'LABEL'];
+                    if (!invalidContainers.includes(currentNode.tagName)) {
+                        for (let child of currentNode.childNodes) {
+                            recursiveDOMNodeWalker(child);
+                        }
+                    }
+                }
+            }
+            recursiveDOMNodeWalker(document.body);
+        }
+
+        // ACCESSIBILITY TTS SYSTEM ENGINE UTTERANCE EMISSION
+        function initializeTextToSpeechHoverAnalytics() {
+            document.addEventListener("mouseover", (event) => {
+                if (!state.voiceReaderEnabled) return;
+                const focusElementNode = event.target.closest("p, h1, h2, h3, h4, span, option, button");
+                if (!focusElementNode) return;
+
+                const extractedTextStr = focusElementNode.innerText || focusElementNode.textContent;
+                if (!extractedTextStr || extractedTextStr.trim().length === 0) return;
+
+                focusElementNode.classList.add("tts-reading-highlight");
+                dispatchVocalAudioSynthesisUtteranceStream(extractedTextStr);
+            });
+
+            document.addEventListener("mouseout", (event) => {
+                const focusElementNode = event.target.closest("p, h1, h2, h3, h4, span, option, button");
+                if (focusElementNode) {
+                    focusElementNode.classList.remove("tts-reading-highlight");
+                }
+            });
+        }
+
+        function dispatchVocalAudioSynthesisUtteranceStream(phraseString) {
+            if (!window.speechSynthesis) return;
+            window.speechSynthesis.cancel(); // Terminate existing readings to enhance UI response speeds
+
+            const currentSpeechUtterance = new SpeechSynthesisUtterance(phraseString);
+            currentSpeechUtterance.rate = 1.05; 
+            currentSpeechUtterance.pitch = 1.0;
+            window.speechSynthesis.speak(currentSpeechUtterance);
+        }
+
+        // HELPER APPLICATION FLOATING SYSTEM TOAST MAKER SYSTEM
+        function showApplicationSystemToast(messageString) {
+            const toastElement = document.getElementById('global-application-toast-banner');
+            const messageElement = document.getElementById('toast-message-string-node');
+            
+            if (!toastElement || !messageElement) return;
+            
+            messageElement.textContent = messageString;
+            toastElement.classList.remove('translate-y-20', 'opacity-0');
+            toastElement.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toastElement.classList.remove('translate-y-0', 'opacity-100');
+                toastElement.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINK Wireframe Blueprint & UX/UI Spec Documentation</title>
+    
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wfBlack: '#000000',
+                        wfWhite: '#ffffff',
+                        wfGrayDark: '#111111',
+                        wfGrayMed: '#666666',
+                        wfGrayLight: '#e5e5e5',
+                        wfBg: '#f5f5f5'
+                    },
+                    fontFamily: {
+                        mono: ['Courier New', 'Courier', 'monospace'],
+                        sans: ['Arial', 'Helvetica', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Essential Wireframe Structural Aesthetics */
+        .wf-border {
+            border: 2px solid #000000 !important;
+        }
+        .wf-border-dashed {
+            border: 2px dashed #666666 !important;
+        }
+        .wf-box-diagonal {
+            background-image: linear-gradient(45deg, transparent 49.5%, #e5e5e5 49.5%, #e5e5e5 50.5%, transparent 50.5%),
+                              linear-gradient(-45deg, transparent 49.5%, #e5e5e5 49.5%, #e5e5e5 50.5%, transparent 50.5%);
+        }
+        
+        /* Fixed, Safe Interactive Node Hover Overrides */
+        .wf-interactive-node {
+            transition: all 0.15s ease-in-out;
+            cursor: help;
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+        .wf-interactive-node:hover {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+            border-color: #ffffff !important;
+        }
+        /* Forces all child elements to adapt to inversion gracefully */
+        .wf-interactive-node:hover * {
+            color: #ffffff !important;
+            border-color: #ffffff !important;
+            background-color: transparent !important;
+        }
+        /* Keeps disabled forms and select items legible */
+        .wf-interactive-node hover select, 
+        .wf-interactive-node hover input {
+            color: #ffffff !important;
+            border-color: #ffffff !important;
+        }
+
+        /* Typewriter Animation Core Tickers */
+        .typewriter-ready {
+            display: inline-block;
+            white-space: normal;
+            border-right: 2px solid #ffffff;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #ffffff;
+            border-left: 2px solid #000000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #000000;
+        }
+    </style>
+</head>
+<body class="bg-wfBg text-wfBlack font-mono min-h-screen flex flex-col selection:bg-wfBlack selection:text-wfWhite">
+
+    <div class="bg-wfBlack text-wfWhite p-4 border-b-2 border-wfBlack flex flex-col md:flex-row justify-between items-start md:items-center gap-4 z-50">
+        <div>
+            <h2 class="text-md font-bold tracking-tight uppercase flex items-center gap-2">
+                <i class="fa-solid fa-compass-drafting text-wfWhite"></i> [YEAR 11 ENTERPRISE TASK 2: WIREFRAME ASSESSMENT SANDBOX]
+            </h2>
+            <p class="text-xs text-wfGrayLight font-sans mt-1">
+                Hover over any component block below to map its layout infrastructure, structural design choices, and UX requirements dynamically in the live terminal log below.
+            </p>
+        </div>
+        <div class="text-xs bg-wfGrayDark text-wfWhite px-3 py-2 border border-wfWhite rounded flex flex-col gap-1 min-w-[240px]">
+            <div><strong>Project:</strong> LINK Ecosystem Framework</div>
+            <div><strong>Mode:</strong> Verified High-Contrast Specification Scheme</div>
+        </div>
+    </div>
+
+    <header class="sticky top-0 z-40 bg-wfWhite border-b-2 border-wfBlack px-6 py-4 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 wf-interactive-node" data-desc="STICKY APPLICATION HEADER COMPONENT: Acts as global platform control hub anchor. Houses branding nodes, automated session tickers, global area coordinate filter menus, and high-level view configuration switch matrices. Sticky positioning enforces layout consistency during vertical page content scrolling sweeps.">
+        <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-wfWhite border-2 border-wfBlack flex items-center justify-center font-bold text-lg text-wfBlack wf-box-diagonal">
+                X
+            </div>
+            <div>
+                <h1 class="font-bold text-xl uppercase tracking-tight flex items-center gap-2">
+                    LINK <span class="text-xs px-2 py-0.5 bg-wfBlack text-wfWhite font-bold uppercase rounded">[PORTAL MOCKUP]</span>
+                </h1>
+                <p class="text-xs text-wfGrayMed uppercase tracking-wider mt-0.5 font-sans">[SYS_TIME_STAMP: ACTIVE PROTOTYPE GRID]</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full xl:w-auto">
+            <div class="flex items-center space-x-2 bg-wfWhite p-2 border-2 border-wfBlack rounded w-full sm:w-auto wf-interactive-node" data-desc="SUBURB SELECTION INTERACTION SELECTOR: Triggers a global regional state shift across the active neighborhood platform registries database. Selecting an option fires a centralized state execution thread updating chat archives, swap-meet lists, localized interactive map pins, and AI knowledge parameters instantaneously.">
+                <label class="text-xs font-bold uppercase whitespace-nowrap"><i class="fa-solid fa-map-pin mr-1"></i> [STATE FILTER]:</label>
+                <select id="wf-suburb-mock-select" onchange="switchWireframeMockDataZone(this.value)" class="bg-wfWhite text-wfBlack text-xs font-bold py-1 px-2 border border-wfBlack rounded focus:outline-none transition-colors w-full sm:w-auto cursor-pointer">
+                    <option value="Strathfield">Strathfield (Zone Alpha)</option>
+                    <option value="Burwood">Burwood (Zone Beta)</option>
+                    <option value="Parramatta">Parramatta (Zone Gamma)</option>
+                    <option value="Newtown">Newtown (Zone Delta)</option>
+                </select>
+            </div>
+
+            <nav class="flex flex-wrap gap-1 p-1 bg-wfWhite border-2 border-wfBlack rounded w-full xl:w-auto">
+                <button onclick="switchWireframeActiveTab('dashboard')" id="wf-tab-dashboard" class="px-3 py-1.5 text-xs font-bold uppercase tracking-tight transition-all duration-150 rounded border border-transparent hover:border-wfBlack wf-interactive-node" data-desc="TAB NAVIGATION OPTION [DASHBOARD]: Uncovers a clean, executive structural overview summary containing live council weather alerts, ongoing municipal infrastructural maintenance schedules, and active marketplace volume tickers.">
+                    [DASHBOARD]
+                </button>
+                <button onclick="switchWireframeActiveTab('chat')" id="wf-tab-chat" class="px-3 py-1.5 text-xs font-bold uppercase tracking-tight transition-all duration-150 rounded border border-transparent wf-interactive-node" data-desc="TAB NAVIGATION OPTION [CHAT HUB & AI]: Switches layout view port to expose double-column layout array. The left side handles the active community simulated live lounge message system feed, while the right side initializes the customized Preset AI Knowledge Base.">
+                    [CHAT HUB & AI]
+                </button>
+                <button onclick="switchWireframeActiveTab('marketplace')" id="wf-tab-marketplace" class="px-3 py-1.5 text-xs font-bold uppercase tracking-tight transition-all duration-150 rounded border border-transparent wf-interactive-node" data-desc="TAB NAVIGATION OPTION [MARKETPLACE]: Shifts target container to reveal a responsive 3-column swap-meet matrix board grid. Features user-generated zero-cost barter item items, functional inquiry action buttons, and product categorical condition wrappers.">
+                    [MARKETPLACE]
+                </button>
+                <button onclick="switchWireframeActiveTab('map')" id="wf-tab-map" class="px-3 py-1.5 text-xs font-bold uppercase tracking-tight transition-all duration-150 rounded border border-transparent wf-interactive-node" data-desc="TAB NAVIGATION OPTION [LOCAL MAP]: Invokes a relative coordinate geometric bounding-box sandbox designed to simulate spatial absolute pin positioning across transit gates, parks, and regional commercial blocks.">
+                    [LOCAL MAP]
+                </button>
+                <button onclick="switchWireframeActiveTab('bulletin')" id="wf-tab-bulletin" class="px-3 py-1.5 text-xs font-bold uppercase tracking-tight transition-all duration-150 rounded border border-transparent wf-interactive-node" data-desc="TAB NAVIGATION OPTION [BULLETIN]: Fires structural state updates pulling municipal declaration assets, council safety directives, and community-driven arts/recreational workshop event announcements.">
+                    [BULLETIN]
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="flex-1 max-w-[1700px] w-full mx-auto p-4 lg:p-6 grid grid-cols-12 gap-6 items-start">
+        
+        <aside class="col-span-12 lg:col-span-4 xl:col-span-3 space-y-6">
+            
+            <div class="bg-wfWhite border-2 border-wfBlack rounded p-5 relative overflow-hidden wf-interactive-node" data-desc="REGIONAL IDENTITY PROFILE PANEL: Read-only summary panel echoing state selection metadata records. Provides baseline demographics data, context descriptions, and connection channel stability metrics to establish hyper-local regional relevancy based directly on field survey research.">
+                <span class="text-[10px] font-bold uppercase tracking-wider bg-wfBlack text-wfWhite px-2 py-0.5 rounded">[SIDEBAR CONTEXT NODE]</span>
+                <h2 id="wf-node-suburb-title" class="font-bold text-2xl uppercase mt-3 text-wfBlack">STRATHFIELD</h2>
+                <div class="w-full h-px bg-wfBlack my-3"></div>
+                <p id="wf-node-suburb-desc" class="text-xs text-wfBlack leading-relaxed font-sans">
+                    [Description Placeholder for Selected Active Suburb Entity]
+                </p>
+                <div class="mt-4 pt-4 border-t border-wfBlack text-[11px] space-y-1.5 text-wfBlack">
+                    <div><strong>SURVEYED POPULATION SIZE:</strong> <span id="wf-node-suburb-pop" class="underline font-bold">0</span></div>
+                    <div class="flex items-center gap-1 font-bold"><strong>SYSTEM CHANNEL STATE:</strong> <span class="inline-block w-2 h-2 bg-wfBlack rounded-full"></span> [DATA OPTIMAL]</div>
+                </div>
+            </div>
+
+            <div class="bg-wfWhite border-2 border-wfBlack rounded p-5 space-y-4 wf-interactive-node" data-desc="ACCESSIBILITY UTILITIES SPECS COMPONENT: Framework blueprint testing container for user-controlled visual overrides. Demonstrates core implementation targets including programmatic Screen-Reader hook toggles, system-wide layout text scale sliders, high-contrast style sheets, and alternative character conversion nodes.">
+                <h3 class="font-bold text-sm uppercase border-b-2 border-wfBlack pb-2 text-wfBlack"><i class="fa-solid fa-universal-access"></i> ACCESSIBILITY OVERLAY SPECS</h3>
+                
+                <div class="p-3 bg-wfWhite border border-black border-dashed text-xs space-y-1">
+                    <span class="font-bold block uppercase text-wfBlack">[1. SCREEN READER EMULATOR]:</span>
+                    <p class="text-[11px] font-sans text-wfGrayMed">Tracks mouse pointer hover coordinate matrices over plain-text blocks, executing synthesized speech stream cancel/play queue sequences natively to aid visually impaired demographics.</p>
+                </div>
+
+                <div class="p-3 bg-wfWhite border border-black border-dashed text-xs space-y-1">
+                    <span class="font-bold block uppercase text-wfBlack">[2. HIGH CONTRAST SCHEME]:</span>
+                    <p class="text-[11px] font-sans text-wfGrayMed">Strips complex background values, forcing strict monochrome black-and-white layout properties to guarantee a 21:1 structural contrast performance.</p>
+                </div>
+
+                <div class="p-3 bg-wfWhite border border-black border-dashed text-xs space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold block uppercase text-wfBlack">[3. TEXT DYNAMIC SCALE]:</span>
+                        <span class="font-mono font-bold text-[10px] bg-wfBlack text-wfWhite px-1">[16PX BASE]</span>
+                    </div>
+                    <div class="w-full h-4 bg-wfGrayLight border border-wfBlack relative flex items-center">
+                        <div class="w-1/3 h-full bg-wfBlack"></div>
+                        <div class="absolute left-1/3 w-3 h-5 bg-wfWhite border-2 border-wfBlack -mt-0.5 cursor-not-allowed"></div>
+                    </div>
+                </div>
+
+                <div class="pt-2 border-t border-dashed border-wfBlack">
+                    <div class="p-3 bg-wfBlack text-wfWhite rounded text-xs space-y-1">
+                        <span class="font-bold block uppercase text-wfWhite"><i class="fa-solid fa-user-secret"></i> [EXPERIMENTAL MATRIX BRAILLE]:</span>
+                        <p class="text-[10px] font-sans text-wfGrayLight leading-relaxed">Runs an exhaustive deep-level recursive DOM tree-walking parser model inside the webpage viewport layout nodes, converting plain text strings into compliant standard Braille cell syntax codes instantly.</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <section class="col-span-12 lg:col-span-8 xl:col-span-9 space-y-6">
+            
+            <div id="wf-panel-dashboard" class="hidden space-y-4">
+                <div class="bg-wfWhite border-2 border-wfBlack rounded p-6 wf-interactive-node" data-desc="MOCK VIEWPORT MATRIX - DASHBOARD LAYOUT: Displays complex multi-axis structural diagnostic modules. Employs modular card flex frameworks to present real-time localized council summaries and upcoming public asset overhauls efficiently.">
+                    <h3 class="font-bold text-xl uppercase mb-2 text-wfBlack">[MOCK VIEWPORT PANEL: REGIONAL INTEGRATION DASHBOARD]</h3>
+                    <p class="text-xs text-wfGrayMed font-sans mb-4">Multi-channel component monitoring grid mapping real-time operational notifications across active geo-coordinates.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 bg-wfWhite border border-wfBlack rounded wf-interactive-node" data-desc="DATA OVERVIEW MODULE - WEATHER BAROMETER: Fetches real-time environmental atmospheric values from spatial networks. Provides local neighborhood forecast metrics dynamically inside the dashboard structure.">
+                            <div class="w-8 h-8 bg-wfWhite border border-black border-dashed flex items-center justify-center mb-2"><i class="fa-solid fa-cloud-sun"></i></div>
+                            <span class="text-[10px] uppercase block font-bold text-wfGrayMed">[MOCK SENSOR BAROMETER]</span>
+                            <p class="text-sm font-bold uppercase mt-1 text-wfBlack">21°C // MILD CLOUD DRIFT</p>
+                        </div>
+                        <div class="p-4 bg-wfWhite border border-wfBlack rounded wf-interactive-node" data-desc="DATA OVERVIEW MODULE - MUNICIPAL ADVISORY CONTAINER: Inline warning broadcast layout array block. Displays critical municipal directives and upcoming public construction modifications to regional transportation networks.">
+                            <div class="w-8 h-8 bg-wfWhite border border-black border-dashed flex items-center justify-center mb-2"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                            <span class="text-[10px] uppercase block font-bold text-wfGrayMed">[COUNCIL NOTIFICATION STRIP]</span>
+                            <p class="text-xs font-bold uppercase mt-1 text-wfBlack">ROAD INFRASTRUCTURE MAINTENANCE SCHEDULE UNCHANGED</p>
+                        </div>
+                        <div class="p-4 bg-wfWhite border border-wfBlack rounded wf-interactive-node" data-desc="DATA OVERVIEW MODULE - EXCH VALUE WRAPPER: Monitors inventory tracking nodes within the marketplace item arrays. Serves as a high-visibility volume indicator to incentivize local bartering engagement.">
+                            <div class="w-8 h-8 bg-wfWhite border border-black border-dashed flex items-center justify-center mb-2"><i class="fa-solid fa-bullhorn"></i></div>
+                            <span class="text-[10px] uppercase block font-bold text-wfGrayMed">[MARKET MATRIX MONITOR]</span>
+                            <p class="text-sm font-bold uppercase mt-1 text-wfBlack">9+ INDEPENDENT ACTIVE OFFERS AVAILABLE</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="wf-panel-chat" class="grid grid-cols-12 gap-6">
+                
+                <div class="col-span-12 xl:col-span-7 bg-wfWhite border-2 border-wfBlack rounded p-5 flex flex-col h-[580px] justify-between relative wf-interactive-node" data-desc="LOUNGE DIALOGUE FEED LAYOUT: Simulates a high-throughput, multi-user synchronous chat feed container. Features real-time auto-appending message speech bubbles, timestamp log indicators, and active scrolling layout viewport stacks for seamless UX evaluation.">
+                    <div class="border-b border-wfBlack pb-3 flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-md uppercase flex items-center gap-2 text-wfBlack">
+                                <i class="fa-solid fa-comments"></i> [SIMULATED COMM-LOUNGE STREAM]
+                            </h3>
+                            <p class="text-[11px] text-wfGrayMed font-sans">Simulating continuous asynchronous interaction streams between virtual occupant profiles.</p>
+                        </div>
+                        <div class="text-[10px] bg-wfWhite border border-wfBlack px-2 py-0.5 font-bold uppercase flex items-center gap-1 text-wfBlack">
+                            <span class="w-2 h-2 bg-wfBlack rounded-full"></span> LIVE VIEWPORT
+                        </div>
+                    </div>
+
+                    <div id="wf-chat-append-box" class="flex-1 my-4 overflow-y-auto space-y-3 pr-2 border border-wfBlack p-3 bg-wfBg">
+                        </div>
+
+                    <div class="pt-3 border-t border-wfBlack flex gap-2 wf-interactive-node" data-desc="MESSAGE EMISSION TERMINAL: An interactive text-input form component layout block. Simulates input field scanning logic, keypress buffer interception, and send action command loops.">
+                        <input type="text" disabled placeholder="[Wireframe Input Field Node - Disabled in Spec Architecture]" class="flex-1 bg-wfGrayLight text-wfBlack text-xs border border-wfBlack px-3 py-2 focus:outline-none cursor-not-allowed">
+                        <button class="bg-wfBlack text-wfWhite border border-wfBlack px-4 py-2 text-xs font-bold uppercase cursor-not-allowed">[SEND]</button>
+                    </div>
+                </div>
+
+                <div class="col-span-12 xl:col-span-5 bg-wfWhite border-2 border-wfBlack rounded p-5 flex flex-col h-[580px] justify-between relative wf-interactive-node" data-desc="AI SUBURB AGENT SIMULATOR MODULE: Houses interactive UI test nodes linked to localized AI assistant profile models. Features preset query trigger chips that simulate prompt ingestion workflows, delay loading processing overlays, and structured semantic response loops.">
+                    <div class="border-b border-wfBlack pb-3">
+                        <h3 class="font-bold text-md uppercase flex items-center gap-2 text-wfBlack">
+                            <i class="fa-solid fa-robot"></i> [AI CORE SUBURB AUTOMATON]
+                        </h3>
+                        <p class="text-[11px] text-wfGrayMed font-sans">Structured preset prompt triggers executing localized semantic records access retrieval testing models.</p>
+                    </div>
+
+                    <div id="wf-ai-response-shell" class="flex-1 my-3 border border-wfBlack p-3 bg-wfBg overflow-y-auto text-xs space-y-3 text-wfBlack">
+                        <div class="text-wfGrayMed italic font-sans">[Select a prompt chip below to execute synthetic automated semantic pipeline validation...]</div>
+                    </div>
+
+                    <div class="pt-3 border-t border-dashed border-wfBlack space-y-2">
+                        <span class="text-[9px] uppercase font-bold tracking-wider text-wfGrayMed block">[DISPATCH MACRO TEST PROMPT CHIP TO AI LAYER]:</span>
+                        <div class="grid grid-cols-1 gap-1">
+                            <button onclick="dispatchWireframeAIMockWorkflow('q1')" class="text-left w-full px-3 py-1.5 bg-wfWhite border border-wfBlack text-wfBlack font-bold rounded text-[11px] hover:bg-wfBlack hover:text-wfWhite transition-colors flex items-center justify-between cursor-pointer">
+                                <span>[ASK ID: Q1] What is this suburb famous for?</span> <i class="fa-solid fa-circle-question"></i>
+                            </button>
+                            <button onclick="dispatchWireframeAIMockWorkflow('q2')" class="text-left w-full px-3 py-1.5 bg-wfWhite border border-wfBlack text-wfBlack font-bold rounded text-[11px] hover:bg-wfBlack hover:text-wfWhite transition-colors flex items-center justify-between cursor-pointer">
+                                <span>[ASK ID: Q2] Top regional recommendations spec</span> <i class="fa-solid fa-circle-question"></i>
+                            </button>
+                            <button onclick="dispatchWireframeAIMockWorkflow('q3')" class="text-left w-full px-3 py-1.5 bg-wfWhite border border-wfBlack text-wfBlack font-bold rounded text-[11px] hover:bg-wfBlack hover:text-wfWhite transition-colors flex items-center justify-between cursor-pointer">
+                                <span>[ASK ID: Q3] Active municipal warning checks</span> <i class="fa-solid fa-circle-question"></i>
+                            </button>
+                            <button onclick="dispatchWireframeAIMockWorkflow('q4')" class="text-left w-full px-3 py-1.5 bg-wfWhite border border-wfBlack text-wfBlack font-bold rounded text-[11px] hover:bg-wfBlack hover:text-wfWhite transition-colors flex items-center justify-between cursor-pointer">
+                                <span>[ASK ID: Q4] Fetch fun historical factual byte</span> <i class="fa-solid fa-circle-question"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="wf-panel-marketplace" class="hidden space-y-4">
+                <div class="bg-wfWhite border-2 border-wfBlack rounded p-5 wf-interactive-node" data-desc="SWAP EXCHANGE BOARD ARCHITECTURE: Responsive card layout matrix designed to test high-volume marketplace database item card rendering templates. Accommodates conditional product state labels, zero-cost barter flags, and transaction routing triggers modeled after target market survey profiles.">
+                    <div class="flex items-center justify-between border-b border-wfBlack pb-3 mb-4">
+                        <h3 class="font-bold text-lg uppercase text-wfBlack">[MATRIX TEMPLATE: MARKETPLACE ITEM INVENTORY GRID]</h3>
+                        <span class="text-xs bg-wfBlack text-wfWhite px-2 py-0.5 uppercase font-bold">[INVENTORY_SCHEMATIC_VIEW]</span>
+                    </div>
+                    <div id="wf-marketplace-grid-output" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        </div>
+                </div>
+            </div>
+
+            <div id="wf-panel-map" class="hidden space-y-4">
+                <div class="bg-wfWhite border-2 border-wfBlack rounded p-5 wf-interactive-node" data-desc="GEOMETRIC INTERACTIVE LOCATIONAL MAP: An analytical coordinate mapping frame engine simulating spatial absolute positioning overlay algorithms. Tracks municipal park centers, public transportation rail/ferry terminal gates, and regional cafe storefront zones on an abstract geometric backdrop grid instead of a heavy raster map image.">
+                    <div class="border-b border-wfBlack pb-2 mb-4">
+                        <h3 class="font-bold text-lg uppercase text-wfBlack">[GEOMETRIC CORE LOCATION LAYOUT CANVAS]</h3>
+                        <p class="text-xs text-wfGrayMed font-sans">Tests accurate layout relative-position coordinate rendering pins and hover-activated tooltip interaction metadata overlays.</p>
+                    </div>
+                    
+                    <div class="relative w-full h-[420px] bg-wfWhite border border-wfBlack rounded flex items-center justify-center overflow-hidden">
+                        <div class="absolute inset-0 opacity-10 pointer-events-none bg-wfWhite wf-box-diagonal"></div>
+
+                        <div id="wf-map-pins-canvas" class="absolute inset-0 w-full h-full">
+                            </div>
+                        
+                        <div class="absolute bottom-4 right-4 bg-wfWhite border-2 border-wfBlack rounded p-3 text-[10px] shadow-sm space-y-1.5 z-10 font-bold text-wfBlack">
+                            <span class="block uppercase border-b border-wfBlack pb-1">[BLUEPRINT INDEX LEGEND]</span>
+                            <div class="flex items-center gap-2"><span class="w-4 h-4 bg-wfWhite border border-wfBlack rounded-full flex items-center justify-center font-black text-[8px]">C</span> CAFETERIA COORDINATE NODE</div>
+                            <div class="flex items-center gap-2"><span class="w-4 h-4 bg-wfBlack rounded-full flex items-center justify-center text-wfWhite text-[8px]">P</span> PARK RECREATION BOUNDARY</div>
+                            <div class="flex items-center gap-2"><span class="w-4 h-4 bg-wfWhite border border-dashed border-wfBlack rounded-full flex items-center justify-center text-[8px]">T</span> TRANSIT DEPOT INTERMEDIARY</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="wf-panel-bulletin" class="hidden space-y-4">
+                <div class="bg-wfWhite border-2 border-wfBlack rounded p-5 wf-interactive-node" data-desc="MUNICIPAL DIRECTIVES REGISTER MODULE: Simulates verified official announcements, community event lists, and legal policy declarations. Evaluates structural visual hierarchy patterns, item card border treatments, and category tag contrast parameters to align with legal compliance constraints.">
+                    <h3 class="font-bold text-lg uppercase border-b border-wfBlack pb-2 mb-4 text-wfBlack">[PUBLIC REGISTER: COUNCIL DECLARATIONS & MUNICIPAL TICKERS]</h3>
+                    <div id="wf-bulletin-stack-output" class="space-y-4">
+                        </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="sticky bottom-0 z-50 bg-wfBlack text-wfWhite p-4 border-t-2 border-wfWhite flex flex-col md:flex-row items-stretch justify-between gap-4 shadow-2xl">
+        <div class="flex items-start gap-3 w-full">
+            <div class="text-xl pt-0.5 text-wfWhite flex-shrink-0">
+                <i class="fa-solid fa-terminal"></i>
+            </div>
+            <div class="w-full flex flex-col">
+                <span class="text-[10px] uppercase font-bold tracking-widest text-wfGrayLight font-mono">[LIVE WIREFRAME TELEMETRY SPEC CONSOLE] // ACCESSED COMPONENT ELEMENT ANALYSIS:</span>
+                <div class="mt-1 min-h-[52px] text-xs font-mono text-wfWhite leading-relaxed tracking-wide bg-wfGrayDark p-2 border border-wfGrayMed rounded relative">
+                    <span id="wf-typewriter-target-node" class="typewriter-ready">Hover over any interactive layout framework block node inside the UI layout template grids above to parse its precise telemetry specifications data feed...</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // COMPREHENSIVE LOCALIZED APPLICATION DICTIONARY STORE OBJECT REPLICATED FROM PRODUCTION SPEC
+        const wireframeDatabaseRegistry = {
+            'Strathfield': {
+                description: '[ZONE ENTITY CONTEXT: STRATHFIELD] Major commercial urban residential hub pipeline securely tied to Sydney Inner West grid arrays. High density educational presence matrices paired with cross-platform transit network interchanges.',
+                population: '25,810 SURVEY UNIT SAMPLES',
+                chatHistory: [
+                    { user: 'S. KIPLING', node: '👤', string: 'Identified unknown stray animal entity near Albert Rd pipeline. Seeking owner contact index.' },
+                    { user: 'BOB (UNCLE)', node: '👨', string: 'Trace routed safely. Target belongs to regional florist operation. Returns to base autonomously.' },
+                    { user: 'JI-WOO PARK', node: '🎓', string: 'New catering infrastructure launched adjacent rail station gates. Complimentary assets distributed tonight.' }
+                ],
+                marketplace: [
+                    { item: 'Academic Resource Study Binder Pack', state: 'PRISTINE [FREE]', cost: '$0.00 [BARTER]', tag: 'BOOKS_SHELF' },
+                    { item: 'Structural Timber Dining Chairs (x2)', state: 'FUNCTIONAL', cost: '$20.00 [VAL]', tag: 'FURNITURE_REGO' },
+                    { item: 'Induction Thermal Rice Boiler Hardware', state: 'OPTIMAL RUNNING', cost: '$15.00 [VAL]', tag: 'APPLIANCE_CORE' }
+                ],
+                mapPins: [
+                    { point: 'Strathfield Plaza Retail Junction', symbol: 'C', axisY: '35%', axisX: '40%' },
+                    { point: 'Strathfield Central Park Reserve Bounds', symbol: 'P', axisY: '65%', axisX: '25%' },
+                    { point: 'Primary Multi-Platform Transit Nexus Gate', symbol: 'T', axisY: '20%', axisX: '70%' }
+                ],
+                bulletin: [
+                    { stamp: 'MUNICIPAL ADVISORY', heading: 'Raw Square Pedestrian Footpath Paving Overhaul', copy: 'Temporary lane access blockages initialized Tuesday morning layout shifts. Concrete restoration algorithms active.' },
+                    { stamp: 'COMMUNITY RUN', heading: 'Regional Book Repository Exchange Gathering', copy: 'Bring legacy hardback units to Central Plaza Gazebo assembly coordinate point this Sunday afternoon at 14:00.' }
+                ]
+            },
+            'Burwood': {
+                description: '[ZONE ENTITY CONTEXT: BURWOOD] High-intensity economic retail zone framework recognized for sprawling multi-level commercial hubs, legacy municipal public park environments, and night-market food infrastructure arrays.',
+                population: '40,220 SURVEY UNIT SAMPLES',
+                chatHistory: [
+                    { user: 'CHLOE T.', node: '👤', string: 'Chinatown thoroughfares reporting extreme lane capacity load parameters. High volume food aromas logged.' },
+                    { user: 'MARCUS L.', node: '👨', string: 'Inquire status check on desert shop queues. Evaluating whether to commit transit vectors to area.' }
+                ],
+                marketplace: [
+                    { item: 'Chinatown Hawker Coupon Authorization Code', state: 'VALID UNUSED', cost: '$5.00', tag: 'VOUCHER_SYS' },
+                    { item: 'Legacy Hide Leather Outwear Jacket', state: 'SCUFFED VINTAGE', cost: '$35.00', tag: 'APPAREL' },
+                    { item: 'Organic Air Purification Plant Pot Array', state: 'HEALTHY BIOME', cost: '$0.00 [FREE]', tag: 'GARDEN_BOTANIC' }
+                ],
+                mapPins: [
+                    { point: 'Chinatown Central Eatery Corridor Alley', symbol: 'C', axisY: '45%', axisX: '55%' },
+                    { point: 'Historical Burwood Public Parklands Boundary', symbol: 'P', axisY: '30%', axisX: '20%' },
+                    { point: 'Burwood Bus Interchanger Main Gateway Gate', symbol: 'T', axisY: '70%', axisX: '45%' }
+                ],
+                bulletin: [
+                    { stamp: 'TRAFFIC WARNING', heading: 'Burwood Road Evening Thoroughfare Density Spikes', copy: 'Expect heavily reduced velocity curves across vehicle networks Friday/Saturday nights due to commercial patron influx.' },
+                    { stamp: 'RECREATION SPEC', heading: 'Acoustic Soundstage Performances at Park Pavilion', copy: 'Youth performance networks initiating free guitar signal arrays in main pavilion coordinates this Saturday mid-day.' }
+                ]
+            },
+            'Parramatta': {
+                description: '[ZONE ENTITY CONTEXT: PARRAMATTA] Primary western commercial corporate anchor anchor framework. Blends massive administrative skyscraper offices with historically protected river highway waterways.',
+                population: '31,540 SURVEY UNIT SAMPLES',
+                chatHistory: [
+                    { user: 'LIAM RYAN', node: '🧔', string: 'Rivercat marine transit vessel reported structural transit delay, but sunset visual metrics excellent.' },
+                    { user: 'PRIYA S.', node: '👩', string: 'Parramatta Square lighting matrix active. Chromatographic light displays targeting PHIVE building shell.' }
+                ],
+                marketplace: [
+                    { item: 'Pneumatic Support Office Chair Assembly', state: 'OPTIMAL ALIGNMENT', cost: '$50.00', tag: 'OFFICE_INFRA' },
+                    { item: 'CommBank Stadium Entry Match Passes (x2)', state: 'VALID SPEC', cost: '$40.00', tag: 'TICKETS_REGO' },
+                    { item: '10-Speed Mechanical Rail Framework Bicycle', state: 'REPAIR REQUIRED', cost: '$0.00 [FREE]', tag: 'SPORT_GEAR' }
+                ],
+                mapPins: [
+                    { point: 'Church Street Eatery Alfresco Dining Runway', symbol: 'C', axisY: '25%', axisX: '50%' },
+                    { point: 'Parramatta Historical Park Assembly Ground', symbol: 'P', axisY: '40%', axisX: '15%' },
+                    { point: 'Rivercat Commuter Ferry Terminal Infrastructure', symbol: 'T', axisY: '15%', axisX: '80%' }
+                ],
+                bulletin: [
+                    { stamp: 'METRO UPDATE', heading: 'Light Rail Systems Validation Ingestion Tests', copy: 'Automated track vehicles executing continuous validation testing routines. Maintain clear safety bounds from path lines.' },
+                    { stamp: 'EXHIBITION SPEC', heading: 'Colonial Government House Heritage Access Walk', copy: 'Analyze vintage early settlement architecture profiles via supervised weekend walking vector pathways.' }
+                ]
+            },
+            'Newtown': {
+                description: '[ZONE ENTITY CONTEXT: NEWTOWN] Highly alternative, bohemian counter-culture arts enclave layout. Characterized by continuous high-density street mural installations, pre-loved fashion storefront operations, and vegan dining concepts.',
+                population: '15,030 SURVEY UNIT SAMPLES',
+                chatHistory: [
+                    { user: 'ZIGGY WILD', node: '🧑', string: 'Observed graphic paint installation operative executing fresh street wall imagery on Enmore Road.' },
+                    { user: 'LUNA CONTEXT', node: '👩', string: 'Notification checklist: local neighborhood communal literary exchange drive wraps up submission index Friday.' }
+                ],
+                marketplace: [
+                    { item: 'Analog Vinyl Disc Transcription Turntable Unit', state: 'VINTAGE WORKING', cost: '$80.00', tag: 'AUDIO_HARDWARE' },
+                    { item: 'Heavy Leather Combat Footwear Units (Size 9)', state: 'USED PATINA', cost: '$30.00', tag: 'FOOTWEAR' },
+                    { item: 'Handmade Synthetic Canvas Mural Artwork Frame', state: 'ORIGINAL ITEM', cost: '$0.00 [FREE]', tag: 'DECOR_MOCK' }
+                ],
+                mapPins: [
+                    { point: 'King Street Eclectic Storefront Row Matrix', symbol: 'C', axisY: '50%', axisX: '35%' },
+                    { point: 'Camperdown Memorial Public Rest Area Park', symbol: 'P', axisY: '20%', axisX: '60%' },
+                    { point: 'Newtown Station Main Entry/Exit Portal Apex', symbol: 'T', axisY: '75%', axisX: '30%' }
+                ],
+                bulletin: [
+                    { stamp: 'PENALTY ALERT', heading: 'King Street Clearway Vehicle Extraction Schedules', copy: 'Strict towing retrieval operations commence daily at exactly 15:00 hours. Parked units are extracted forcefully.' },
+                    { stamp: 'CREATIVE GRANT', heading: 'Alleyway Brick Wall Beautification Directives', copy: 'Property owners can apply for financial compensation packages to fund approved local art mural projects.' }
+                ]
+            }
+        };
+
+        // CENTRAL CORE PROTO-STATE MACHINE
+        const currentSpecEngineState = {
+            activeSubZone: 'Strathfield',
+            activeViewportTab: 'chat',
+            isTypewriterActiveFlag: false,
+            textTypingTimeoutIdentity: null
+        };
+
+        // INITIALIZATION HOOK
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeInteractiveWireframeHoverTerminal();
+            switchWireframeMockDataZone('Strathfield');
+        });
+
+        // ROUTER: EXECUTES SUBURB ARCHIVE SHIFTS ACROSS RENDER MATRIX BLOCKS
+        function switchWireframeMockDataZone(selectedZoneIdString) {
+            currentSpecEngineState.activeSubZone = selectedZoneIdString;
+            const targetDataPackage = wireframeDatabaseRegistry[selectedZoneIdString];
+            if (!targetDataPackage) return;
+
+            // Update Primary Text Containers
+            document.getElementById('wf-node-suburb-title').textContent = `${selectedZoneIdString.toUpperCase()} [REGIONAL CODE]`;
+            document.getElementById('wf-node-suburb-desc').textContent = targetDataPackage.description;
+            document.getElementById('wf-node-suburb-pop').textContent = targetDataPackage.population;
+
+            // Render Lounge Streams
+            const chatLogShell = document.getElementById('wf-chat-append-box');
+            chatLogShell.innerHTML = '';
+            targetDataPackage.chatHistory.forEach(msg => {
+                const bubbleElement = document.createElement('div');
+                bubbleElement.className = "p-3 border border-wfBlack bg-wfWhite space-y-1 rounded text-[11px] text-wfBlack";
+                bubbleElement.innerHTML = `
+                    <div class="flex justify-between font-bold border-b border-wfGrayLight pb-1">
+                        <span>${msg.node} [LOGGED_USER: ${msg.user}]</span>
+                        <span class="text-wfGrayMed">[MOCK_TIMESTAMP]</span>
+                    </div>
+                    <p class="font-sans text-[11px] mt-1">${msg.string}</p>
+                `;
+                chatLogShell.appendChild(bubbleElement);
+            });
+            chatLogShell.scrollTop = chatLogShell.scrollHeight;
+
+            // Render Marketplace Framework Spec Cards
+            const marketGridShell = document.getElementById('wf-marketplace-grid-output');
+            marketGridShell.innerHTML = '';
+            targetDataPackage.marketplace.forEach(product => {
+                const structuralCard = document.createElement('div');
+                structuralCard.className = "p-4 bg-wfWhite border-2 border-wfBlack rounded text-xs flex flex-col justify-between h-[160px] relative wf-interactive-node";
+                structuralCard.setAttribute('data-desc', `MARKETPLACE RENDERED CARD GRID BLOCK: Evaluation blueprint component displaying specific product metrics database nodes. Validates structural grid flex bounds, zero-cost currency labels ($0.00 for survey-requested bartering), and product condition wrappers.`);
+                structuralCard.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <span class="bg-wfBlack text-wfWhite font-bold px-1 text-[9px] uppercase tracking-tight">[CAT: ${product.tag}]</span>
+                        <span class="font-mono font-bold text-wfBlack">${product.cost}</span>
+                    </div>
+                    <h4 class="font-bold uppercase tracking-tight text-[11px] mt-2 text-wfBlack">${product.item}</h4>
+                    <div class="text-[10px] text-wfGrayMed mt-1"><strong>CONDITION MATRIX:</strong> ${product.state}</div>
+                    <button class="w-full mt-3 py-1 bg-wfWhite border border-wfBlack text-wfBlack font-bold uppercase text-[10px] cursor-not-allowed">[SPEC BUTTON: REGO INQUIRY]</button>
+                `;
+                marketGridShell.appendChild(structuralCard);
+            });
+
+            // Render Map Coordinate Overlay Geometry Pins
+            const coordinateCanvasShell = document.getElementById('wf-map-pins-canvas');
+            coordinateCanvasShell.innerHTML = '';
+            targetDataPackage.mapPins.forEach(nodePin => {
+                const pinpointWrapper = document.createElement('div');
+                pinpointWrapper.className = "absolute transform -translate-x-1/2 -translate-y-1/2 group cursor-help z-20 wf-interactive-node";
+                pinpointWrapper.style.top = nodePin.axisY;
+                pinpointWrapper.style.left = nodePin.axisX;
+                pinpointWrapper.setAttribute('data-desc', `MAP ABSOLUTE SPATIAL PIN NODE: Evaluates geometric absolute layout calculations. Map pin identifier index: "${nodePin.point}". Decodes directly to layout percentages: Y Axis = ${nodePin.axisY} / X Axis = ${nodePin.axisX}. Avoids heavy static raster maps.`);
+                
+                let renderPinStyleClass = "bg-wfWhite border-2 border-wfBlack text-wfBlack font-black";
+                if (nodePin.symbol === 'P') renderPinStyleClass = "bg-wfBlack text-wfWhite font-bold border border-wfWhite";
+                if (nodePin.symbol === 'T') renderPinStyleClass = "bg-wfWhite border-2 border-dashed border-wfBlack text-wfBlack font-black";
+
+                pinpointWrapper.innerHTML = `
+                    <div class="w-6 h-6 ${renderPinStyleClass} rounded-full flex items-center justify-center text-[10px] shadow-md">
+                        ${nodePin.symbol}
+                    </div>
+                    <div class="absolute bottom-7 left-1/2 transform -translate-x-1/2 bg-wfBlack text-wfWhite text-[9px] font-mono px-2 py-1 border border-wfWhite shadow-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                        [LOC INDEX: ${nodePin.point}]
+                    </div>
+                `;
+                coordinateCanvasShell.appendChild(pinpointWrapper);
+            });
+
+            // Render Bulletin Stack Registry Rows
+            const advisoryRegisterStackShell = document.getElementById('wf-bulletin-stack-output');
+            advisoryRegisterStackShell.innerHTML = '';
+            targetDataPackage.bulletin.forEach(notice => {
+                const wireframeAdvisoryRow = document.createElement('div');
+                wireframeAdvisoryRow.className = "p-4 bg-wfWhite border-l-4 border-l-wfBlack border-t border-b border-r border-wfBlack rounded-r text-xs space-y-2 wf-interactive-node";
+                wireframeAdvisoryRow.setAttribute('data-desc', `COUNCIL RECORD STRUCTURAL SHEET: Emulates verified public notifications. Formats system classification stamps, structural typography headings, and long-form descriptive copy text blocks to cross-validate layout balance and accessibility read metrics.`);
+                wireframeAdvisoryRow.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="bg-wfBlack text-wfWhite font-bold px-1.5 py-0.5 text-[9px] uppercase tracking-wider">[STAMP: ${notice.stamp}]</span>
+                        <h4 class="font-bold uppercase tracking-tight text-[12px] text-wfBlack">${notice.heading}</h4>
+                    </div>
+                    <p class="font-sans text-wfBlack text-[11px] leading-relaxed">${notice.copy}</p>
+                `;
+                advisoryRegisterStackShell.appendChild(wireframeAdvisoryRow);
+            });
+
+            // Re-bind interactive events to newly drawn elements
+            initializeInteractiveWireframeHoverTerminal();
+        }
+
+        // TAB RUNTIME CONTROLLER ROUTER METHOD
+        function switchWireframeActiveTab(targetViewPanelId) {
+            currentSpecEngineState.activeViewportTab = targetViewPanelId;
+            const viewMatrixRegistryIds = ['dashboard', 'chat', 'marketplace', 'map', 'bulletin'];
+            
+            viewMatrixRegistryIds.forEach(pId => {
+                const containerNodeRef = document.getElementById(`wf-panel-${pId}`);
+                const actionButtonNodeRef = document.getElementById(`wf-tab-${pId}`);
+                
+                if (pId === targetViewPanelId) {
+                    if (pId === 'chat') {
+                        containerNodeRef.classList.remove('hidden');
+                        containerNodeRef.classList.add('grid');
+                    } else {
+                        containerNodeRef.classList.remove('hidden');
+                    }
+                    actionButtonNodeRef.className = "px-3 py-1.5 text-xs font-bold uppercase tracking-tight transition-all duration-150 rounded bg-wfBlack text-wfWhite border border-wfBlack wf-interactive-node";
+                } else {
+                    containerNodeRef.classList.add('hidden');
+                    containerNodeRef.classList.remove('grid');
+                    actionButtonNodeRef.className = "px-3 py-1.5 text-xs font-bold uppercase tracking-tight transition-all duration-150 rounded bg-wfWhite text-wfBlack border border-transparent hover:bg-wfGrayLight wf-interactive-node";
+                }
+            });
+
+            initializeInteractiveWireframeHoverTerminal();
+        }
+
+        // FIXED CHIP AUTOMATED RESPONSE WORKFLOW EMULATION
+        function dispatchWireframeAIMockWorkflow(queryKeyId) {
+            const displayShell = document.getElementById('wf-ai-response-shell');
+            const targetZone = currentSpecEngineState.activeSubZone;
+            
+            displayShell.innerHTML = `<div class="animate-pulse text-wfBlack uppercase font-mono">[PROCESSING ENGINE PROMPT: LOADING SEMANTIC RETRIEVAL MATCHES...]</div>`;
+            
+            setTimeout(() => {
+                let generatedResponseString = "";
+                if (queryKeyId === 'q1') {
+                    generatedResponseString = `[AI RESPONSE SYSTEM]: ${targetZone} is prominent in primary database index vectors for historical urban distribution channels and specialized community multi-tier learning infrastructure hubs.`;
+                } else if (queryKeyId === 'q2') {
+                    generatedResponseString = `[AI RESPONSE SYSTEM]: Survey analytics cross-match recommends verifying the transit nexus terminal grids and reviewing regional community garden spaces active within ${targetZone} coordinate frames.`;
+                } else if (queryKeyId === 'q3') {
+                    generatedResponseString = `[AI RESPONSE SYSTEM]: Query complete. ${targetZone} safety indexes indicate optimal baseline stability. Check active footpath reconstruction protocols logged in the regional [BULLETIN] register registry.`;
+                } else {
+                    generatedResponseString = `[AI RESPONSE SYSTEM]: Automated historical factual trace: ${targetZone} parameters show a 15% increase in youth-driven digital interaction trends according to original primary field research survey results.`;
+                }
+                
+                displayShell.innerHTML = `
+                    <div class="p-2 border border-wfBlack bg-wfWhite rounded">
+                        <span class="font-bold block uppercase tracking-wide text-[10px] border-b border-wfBlack pb-1 mb-1">[AI CORE PROTOCOL EXECUTION SUCCESS]</span>
+                        <p class="font-sans text-[11px] leading-relaxed text-wfBlack">${generatedResponseString}</p>
+                    </div>
+                `;
+            }, 500);
+        }
+
+        // TYPEWRITER ANIMATION ENGINE MECHANICS SPEC
+        function initializeInteractiveWireframeHoverTerminal() {
+            const specTrackableElements = document.querySelectorAll('.wf-interactive-node');
+            specTrackableElements.forEach(interactiveElement => {
+                interactiveElement.removeEventListener('mouseenter', executeTerminalStringParserWorkflow);
+                interactiveElement.addEventListener('mouseenter', executeTerminalStringParserWorkflow);
+            });
+        }
+
+        function executeTerminalStringParserWorkflow(event) {
+            event.stopPropagation(); // Halts bubble loops to parse the leaf-most component block accurately
+            const explicitDescriptionString = this.getAttribute('data-desc');
+            const terminalOutputNode = document.getElementById('wf-typewriter-target-node');
+            
+            if (!explicitDescriptionString) return;
+
+            if (currentSpecEngineState.textTypingTimeoutIdentity) {
+                clearInterval(currentSpecEngineState.textTypingTimeoutIdentity);
+            }
+
+            terminalOutputNode.textContent = '';
+            let zeroIndexTrackingCharacterCursor = 0;
+            currentSpecEngineState.isTypewriterActiveFlag = true;
+
+            currentSpecEngineState.textTypingTimeoutIdentity = setInterval(() => {
+                if (zeroIndexTrackingCharacterCursor < explicitDescriptionString.length) {
+                    terminalOutputNode.textContent += explicitDescriptionString.charAt(zeroIndexTrackingCharacterCursor);
+                    zeroIndexTrackingCharacterCursor++;
+                } else {
+                    clearInterval(currentSpecEngineState.textTypingTimeoutIdentity);
+                    currentSpecEngineState.isTypewriterActiveFlag = false;
+                }
+            }, 6); // Optimal layout text rendering performance delay metric
+        }
+    </script>
+</body>
+</html>
