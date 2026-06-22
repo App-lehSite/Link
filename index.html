@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LINK Startup Animation</title>
+  <style>
+    :root {
+      --bg-cream: #fffdfa;
+      --text-espresso: #110a06;
+      --brand-mocha: #3d230d;
+
+      /* ==========================================
+         1. UNTOUCHED STARTING COORDINATES & SIZE
+         ========================================== */
+      --init-i-dot-x: -33px;  
+      --init-i-dot-y: 112px;  
+      --init-i-dot-size: 26px; 
+
+      /* ==========================================
+         2. ADJUSTED LOGO NODES (Larger tips, further apart)
+         ========================================== */
+      --node-size-final: 54px;   /* Larger corner balls as requested */
+      
+      /* Apex (Top Dot) Final Position */
+      --apex-x: 0px;
+      --apex-y: -64px;
+
+      /* Left Dot Final Position */
+      --left-x: -57px;
+      --left-y: 35px;
+
+      /* Right Dot Final Position */
+      --right-x: 57px;
+      --right-y: 35px;
+
+      /* ==========================================
+         3. ADJUSTED BRIDGE & CUTOUT (Thinner arms)
+         ========================================== */
+      --bridge-scale: 2.5;       /* Balanced connection volume */
+      --cutout-size: 88px;       /* Larger inner hole to thin the connecting arms */
+      --cutout-offset-y: 8px;    /* Center calibration */
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      height: 600px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* --- STAGE 1: BRAND TEXT (UNTOUCHED) --- */
+    .brand-text {
+      font-size: 110px;
+      font-weight: 900;
+      color: var(--text-espresso);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      position: absolute;
+      z-index: 10;
+      pointer-events: none;
+      gap: 15px;
+      padding-left: 56px; 
+      transform: translate(24px, 22px); 
+    }
+
+    .letter-l, .letter-n, .letter-k {
+      display: inline-block;
+      line-height: 0.85;
+      animation: fadeOutSurroundings 0.6s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+      animation-delay: 1.4s;
+    }
+
+    /* The custom lowercase 'i' */
+    .letter-i {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      width: 44px;
+      height: 105px;
+    }
+
+    /* Stem of the 'i' */
+    .stem {
+      width: 24px;
+      height: 56px;
+      background-color: var(--text-espresso);
+      position: absolute;
+      bottom: 0;
+      animation: fadeOutSurroundings 0.6s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+      animation-delay: 1.4s;
+    }
+
+    /* --- STAGE 2: THE METABALL TRIANGLE --- */
+    .logo-stage {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 5;
+    }
+
+    .metaball-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      filter: url('#gooey-filter');
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* The animated main-dot starts small in the text and scales up smoothly at the end */
+    .main-dot {
+      position: absolute;
+      width: var(--init-i-dot-size);
+      height: var(--init-i-dot-size);
+      background-color: var(--brand-mocha);
+      border-radius: 50%;
+      z-index: 8;
+      animation: moveToApex 1.0s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      animation-delay: 1.4s;
+    }
+
+    /* Sprouting left and right nodes */
+    .node {
+      position: absolute;
+      width: var(--node-size-final);
+      height: var(--node-size-final);
+      background-color: var(--brand-mocha);
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    .node-left {
+      animation: splitToLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: 2.3s;
+    }
+
+    .node-right {
+      animation: splitToRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: 2.3s;
+    }
+
+    /* Center bridge connector */
+    .gooey-bridge {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      background-color: var(--brand-mocha);
+      border-radius: 50%;
+      transform: scale(0);
+      top: calc(50% - 16px);
+      left: calc(50% - 16px);
+      animation: expandBridge 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      animation-delay: 3.0s;
+    }
+
+    /* Crisp Custom Cutout Shield */
+    .inner-cutout {
+      position: absolute;
+      width: var(--cutout-size);
+      height: var(--cutout-size);
+      z-index: 9;
+      transform: scale(0);
+      top: calc(50% - (var(--cutout-size) / 2) + var(--cutout-offset-y));
+      left: calc(50% - (var(--cutout-size) / 2));
+      animation: popCutout 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
+      animation-delay: 3.7s;
+    }
+
+    .cutout-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* --- STAGE 3: CONTINUE BUTTON --- */
+    .action-gate {
+      position: absolute;
+      bottom: 80px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: revealButton 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: 4.4s;
+      z-index: 20;
+    }
+
+    .btn-continue {
+      display: inline-block;
+      text-decoration: none;
+      padding: 15px 45px;
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--bg-cream);
+      background-color: var(--text-espresso);
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(17, 10, 6, 0.1);
+      transition: transform 0.2s ease, background-color 0.2s ease;
+      font-family: Arial, sans-serif;
+      letter-spacing: 1.5px;
+    }
+
+    .btn-continue:hover {
+      background-color: var(--brand-mocha);
+      transform: scale(1.03);
+    }
+
+    /* --- ANIMATION KEYFRAMES --- */
+    @keyframes fadeOutSurroundings {
+      to {
+        opacity: 0;
+        filter: blur(5px);
+        transform: scale(0.85);
+      }
+    }
+
+    @keyframes moveToApex {
+      0% {
+        width: var(--init-i-dot-size);
+        height: var(--init-i-dot-size);
+        transform: translate(var(--init-i-dot-x), var(--init-i-dot-y));
+      }
+      40% {
+        /* Expand dot smoothly to larger final size */
+        width: var(--node-size-final);
+        height: var(--node-size-final);
+      }
+      100% {
+        width: var(--node-size-final);
+        height: var(--node-size-final);
+        transform: translate(var(--apex-x), var(--apex-y));
+      }
+    }
+
+    @keyframes splitToLeft {
+      0% {
+        opacity: 1;
+        transform: translate(var(--apex-x), var(--apex-y));
+      }
+      100% {
+        opacity: 1;
+        transform: translate(var(--left-x), var(--left-y));
+      }
+    }
+
+    @keyframes splitToRight {
+      0% {
+        opacity: 1;
+        transform: translate(var(--apex-x), var(--apex-y));
+      }
+      100% {
+        opacity: 1;
+        transform: translate(var(--right-x), var(--right-y));
+      }
+    }
+
+    @keyframes expandBridge {
+      0% {
+        transform: scale(0);
+      }
+      100% {
+        transform: scale(var(--bridge-scale));
+      }
+    }
+
+    @keyframes popCutout {
+      0% {
+        transform: scale(0) rotate(0deg);
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
+    @keyframes revealButton {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Stage 1: Brand Text -->
+    <div class="brand-text">
+      <span class="letter-l">L</span>
+      <span class="letter-i">
+        <span class="stem"></span>
+      </span>
+      <span class="letter-n">N</span>
+      <span class="letter-k">K</span>
+    </div>
+
+    <!-- Stage 2: Liquid Triangle Formation -->
+    <div class="logo-stage">
+      <!-- The filtered liquid container -->
+      <div class="metaball-container">
+        <!-- Main Dot starts aligned with text, then animates to Apex -->
+        <div class="main-dot"></div>
+        
+        <!-- Nodes that sprout directly from the top apex -->
+        <div class="node node-left"></div>
+        <div class="node node-right"></div>
+        
+        <!-- Center bridge connecting the nodes with a gooey effect -->
+        <div class="gooey-bridge"></div>
+      </div>
+
+      <!-- Crisp, perfect organic triangular cutout -->
+      <div class="inner-cutout">
+        <svg viewBox="0 0 100 100" class="cutout-svg" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 50 22 
+                   C 54 22, 69 49, 74 59 
+                   C 78 67, 71 73, 61 73 
+                   L 39 73 
+                   C 29 73, 22 67, 26 59 
+                   C 31 49, 46 22, 50 22 Z" 
+                fill="var(--bg-cream)" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Stage 3: Continue Button linked to index2.html -->
+    <div class="action-gate">
+      <a href="index2.html" class="btn-continue">CONTINUE</a>
+    </div>
+
+  </div>
+
+  <!-- Smoother & Crisper Gooey Filter Matrix -->
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="width: 0; height: 0; position: absolute;">
+    <defs>
+      <filter id="gooey-filter">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10" result="gooey" />
+        <feComposite in="SourceGraphic" in2="gooey" operator="atop" />
+      </filter>
+    </defs>
+  </svg>
+
+</body>
+</html>
